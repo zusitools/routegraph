@@ -1,2 +1,7 @@
 *.user
+*.suo
 build
+debug
+release
+Win32
+GeneratedFiles
