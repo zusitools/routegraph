@@ -170,7 +170,7 @@ Route::Route(QString fileName)
             QString signal = in.readLine();
 
             if (!station.isEmpty() && !signal.isEmpty()) {
-                Signal *sig = new Signal(NULL, te->line().p2(), te->line().angle(), station + ", " + signal + " (" + QString::number(te->number()) + ")");
+                Signal *sig = new Signal(NULL, te->line().p2(), te->line().angle(), station + ", " + signal /* + " (" + QString::number(te->number()) + ")" */);
                 sig->setPos(te->line().p2());
                 m_signals.append(sig);
                 te->setHasSignal(true);
