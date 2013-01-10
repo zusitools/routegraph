@@ -15,6 +15,7 @@ class Route
 {
 public:
     Route(QString fileName);
+    ~Route();
 
     QList<QGraphicsPathItem*> *trackSegments() { return &m_trackSegments; }
     QList<ViewPoint*> *viewPoints() { return &m_viewPoints; }

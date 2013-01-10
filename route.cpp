@@ -55,7 +55,9 @@ Route::Route(QString fileName)
     QTextStream in(&file);
     in.setCodec("ISO 8859-1");
 
+    #ifdef REMOVE_OPPOSITES
     QHash<int, QList<TrackElement*>*> trackElementsByStartX;
+    #endif
     QList<TrackElement*> trackElementsPointingLeft;
     QHash<TrackElement*, QString> startingPoints;
 
@@ -124,6 +126,7 @@ Route::Route(QString fileName)
 
         te->setLine(QLineF(startX, startY, endX, endY));
 
+        #ifdef REMOVE_OPPOSITES
         int intStartX = (int)startX;
         if (!trackElementsByStartX.contains(intStartX)) {
             QList<TrackElement*> *newList = new QList<TrackElement*>();
@@ -132,6 +135,7 @@ Route::Route(QString fileName)
         } else {
             trackElementsByStartX[intStartX]->append(te);
         }
+        #endif
 
         if (te->line().angle() > 90.0 && te->line().angle() <= 270.0) {
             trackElementsPointingLeft.append(te);
@@ -225,6 +229,7 @@ Route::Route(QString fileName)
     }
 
     qDebug() << "Removed" << (originalCount - trackElements.count()) << "elements, now" << trackElements.count();
+    qDeleteAll(trackElementsByStartX);
     #endif
 
     // Create segments from track elements
@@ -265,4 +270,13 @@ Route::Route(QString fileName)
     }
 
     qDebug() << m_trackSegments.count() << "track segments";
+}
+
+Route::~Route()
+{
+    qDeleteAll(trackElements);
+    qDeleteAll(m_trackSegments);
+    qDeleteAll(m_signals);
+    qDeleteAll(m_viewPoints);
+    qDeleteAll(m_startingPoints);
 }

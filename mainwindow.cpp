@@ -26,6 +26,10 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+
+    if (m_route) {
+        delete m_route;
+    }
 }
 
 void MainWindow::fileOpenTriggered()
