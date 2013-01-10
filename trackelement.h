@@ -9,6 +9,7 @@ class TrackElement
 {
 public:
     TrackElement(const int number);
+    ~TrackElement();
 
     // The successor elements of this element
     std::vector<TrackElement*> next;
