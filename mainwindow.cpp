@@ -16,6 +16,8 @@ MainWindow::MainWindow(QWidget *parent) :
     trackView = new TrackView;
     trackView->setRenderHints(QPainter::Antialiasing);
     setCentralWidget(trackView);
+
+    m_route = NULL;
 }
 
 MainWindow::~MainWindow()
