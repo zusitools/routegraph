@@ -4,6 +4,14 @@
 
 #include <cmath>
 
+TrackElement::TrackElement(const int number)
+{
+    this->m_number = number;
+    this->m_bothDirections = false;
+    this->m_isStartingPoint = false;
+    this->m_hasSignal = false;
+}
+
 bool TrackElement::isOppositeOf(TrackElement *te)
 {
     double deltaX1 = fabs(this->line().p2().x() - te->line().p1().x());

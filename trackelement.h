@@ -8,12 +8,7 @@
 class TrackElement
 {
 public:
-    TrackElement(const int number) {
-        this->m_number = number;
-        this->m_bothDirections = false;
-        this->m_isStartingPoint = false;
-        this->m_hasSignal = false;
-    }
+    TrackElement(const int number);
 
     // The successor elements of this element
     std::vector<TrackElement*> next;
