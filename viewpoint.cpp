@@ -17,8 +17,8 @@ void ViewPoint::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     Q_UNUSED(widget);
 
     painter->setPen(Qt::blue);
-    painter->drawLine(0, 0, round(sin(phiZ + 0.5) * VIEWPOINTSIZE), round(cos(phiZ + 0.5) * VIEWPOINTSIZE));
-    painter->drawLine(0, 0, round(sin(phiZ - 0.5) * VIEWPOINTSIZE), round(cos(phiZ - 0.5) * VIEWPOINTSIZE));
+    painter->drawLine(0, 0, sin(phiZ + 0.5) * VIEWPOINTSIZE, cos(phiZ + 0.5) * VIEWPOINTSIZE);
+    painter->drawLine(0, 0, sin(phiZ - 0.5) * VIEWPOINTSIZE, cos(phiZ - 0.5) * VIEWPOINTSIZE);
 }
 
 QRectF ViewPoint::boundingRect() const
