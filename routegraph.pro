@@ -19,7 +19,9 @@ SOURCES += main.cpp\
     trackview.cpp \
     viewpoint.cpp \
     label.cpp \
-    signal.cpp
+    marker.cpp \
+    signal.cpp \
+    startingpoint.cpp
 
 HEADERS  += mainwindow.h \
     route.h \
@@ -27,8 +29,8 @@ HEADERS  += mainwindow.h \
     trackview.h \
     viewpoint.h \
     label.h \
-    signal.h
+    marker.h \
+    signal.h \
+    startingpoint.h
 
 FORMS    += mainwindow.ui
-
-QMAKE_CXXFLAGS = -std=c++11
