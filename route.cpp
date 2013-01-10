@@ -148,8 +148,10 @@ Route::Route(QString fileName)
             QString signal = in.readLine();
 
             if (!station.isEmpty() && !signal.isEmpty()) {
-                te->setSignal(new Signal(NULL, te->line().p2(), te->line().angle(), station + ", " + signal + " (" + QString::number(te->number()) + ")"));
-                te->signal()->setPos(te->line().p2());
+                Signal *sig = new Signal(NULL, te->line().p2(), te->line().angle(), station + ", " + signal + " (" + QString::number(te->number()) + ")");
+                sig->setPos(te->line().p2());
+                m_signals.append(sig);
+                te->setHasSignal(true);
             }
 
             int numRows = in.readLine().toInt() + 1;
@@ -205,10 +207,6 @@ Route::Route(QString fileName)
                              te->tunnel() ? Qt::DotLine : Qt::SolidLine,
                              Qt::FlatCap));
 
-        if (te->signal()) {
-            te->signal()->setParentItem(pathItem);
-        }
-
         QVector<QPointF> points;
         points.append(te->line().p1());
         points.append(te->line().p2());
@@ -217,9 +215,6 @@ Route::Route(QString fileName)
             te = te->next.front();
             points.append(te->line().p2());
 
-            if (te->signal()) {
-                te->signal()->setParentItem(pathItem);
-            }
         }
 
         QPainterPath path;

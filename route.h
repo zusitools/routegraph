@@ -8,6 +8,7 @@
 
 #include "trackelement.h"
 #include "viewpoint.h"
+#include "signal.h"
 
 class Route
 {
@@ -16,10 +17,12 @@ public:
 
     QList<QGraphicsPathItem*> *trackSegments() { return &m_trackSegments; }
     QList<ViewPoint*> *viewPoints() { return &m_viewPoints; }
+    QList<Signal*> *signalList() { return &m_signals; } // Can't use "signals" because it is a reserved Qt keyword
 
 private:
     QHash<int, TrackElement*> trackElements;
     QList<QGraphicsPathItem*> m_trackSegments;
+    QList<Signal*> m_signals;
     QList<ViewPoint*> m_viewPoints;
     TrackElement *getTrackElement(const int number);
 };
