@@ -23,19 +23,21 @@ Marker::Marker(QGraphicsItem *parent, const QPointF pos, qreal phi, const QStrin
     this->m_color = color;
 
     Label *label = new Label(text, this);
-    label->setBrush(QBrush(color));
+    label->setPen(QPen(color));
 
-    // TODO
-    QPointF tip = QPointF(HEIGHT * sin(angle), HEIGHT * cos(angle));
-    if (angle < M_PI / 2) {
-        label->setPos(tip.x(), tip.y() - label->boundingRect().height());
-    } else if (angle < M_PI) {
-        label->setPos(tip.x() /*- label->boundingRect().width()*/, tip.y() - label->boundingRect().height());
-    } else if (angle < 3 * M_PI / 2) {
-        label->setPos(tip.x() /*- label->boundingRect().width()*/, tip.y());
+    // TODO what if phi >= 360?
+    if (phi <= 90) {
+        label->setAlignment(Qt::AlignLeft | Qt::AlignBottom);
+    } else if (phi <= 180) {
+        label->setAlignment(Qt::AlignRight | Qt::AlignBottom);
+    } else if (phi <= 270) {
+        label->setAlignment(Qt::AlignRight | Qt::AlignTop);
     } else {
-        label->setPos(tip.x(), tip.y());
+        label->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     }
+
+    QPointF tip = QPointF(HEIGHT * sin(angle), HEIGHT * cos(angle));
+    label->setPos(tip);
 }
 
 QRectF Marker::boundingRect() const
