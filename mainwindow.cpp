@@ -2,11 +2,14 @@
 #include "ui_mainwindow.h"
 
 #include <QFileDialog>
+#include <QMessageBox>
 #include <QDebug>
 
 #include "route.h"
 #include "trackelement.h"
 #include "viewpoint.h"
+#include "signal.h"
+#include "label.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -27,14 +30,6 @@ MainWindow::~MainWindow()
 
 void MainWindow::fileOpenTriggered()
 {
-    /*QFileDialog fileOpenDialog(this);
-    fileOpenDialog.setNameFilter("*.str *.STR");
-    fileOpenDialog.setOption(QFileDialog::HideNameFilterDetails);
-
-    if (fileOpenDialog.exec() != QDialog::Accepted) {
-        return;
-    }*/
-
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open file"), QDir::currentPath(), QString("Streckendateien (*.str *.STR)"));
 
     if (fileName.isNull()) {
@@ -49,24 +44,35 @@ void MainWindow::fileOpenTriggered()
         delete trackView->scene();
     }
 
-    m_route = new Route(fileName);
+    try {
+        m_route = new Route(fileName);
+    } catch (QString error) {
+        QMessageBox::critical(this, tr("Error"), error);
+        return;
+    }
+
     this->setWindowTitle(fileName);
 
     QGraphicsScene* scene = new QGraphicsScene(this);
-    trackView->setScene(scene);
 
     foreach (QGraphicsItem* pe, *(m_route->trackSegments())) {
-        trackView->scene()->addItem(pe);
+        scene->addItem(pe);
     }
 
     foreach (ViewPoint* vp, *(m_route->viewPoints())) {
-        trackView->scene()->addItem(vp);
+        scene->addItem(vp);
     }
 
-    trackView->scale(0.1, 0.1);
-    foreach (StartingPoint* sp, *(m_route->startingPoints())) {
-        trackView->scene()->addItem(sp);
+    foreach (Signal* sig, *(m_route->signalList())) {
+        scene->addItem(sig);
     }
+
+    foreach (StartingPoint* sp, *(m_route->startingPoints())) {
+        scene->addItem(sp);
+    }
+
+    trackView->setScene(scene);
+    trackView->fitInView(trackView->sceneRect(), Qt::KeepAspectRatio);
 }
 
 void MainWindow::textScaleTriggered(bool on)

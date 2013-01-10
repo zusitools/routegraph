@@ -13,6 +13,12 @@
 
 #include "signal.h"
 
+// Uncomment this to remove opposite direction elements
+// #define REMOVE_OPPOSITES
+
+// Uncomment this to give each segment a random color
+// #define RANDOM_COLORS
+
 void skipLine(QTextStream &ts, int count = 1) {
     for (int i = 0; i < count; i++) {
         ts.readLine();
@@ -52,6 +58,11 @@ Route::Route(QString fileName)
     QHash<int, QList<TrackElement*>*> trackElementsByStartX;
     QList<TrackElement*> trackElementsPointingLeft;
     QHash<TrackElement*, QString> startingPoints;
+
+    QString version = in.readLine();
+    if (version != "2.2" && version != "2.3" && version != "2.4") {
+        throw QString("Unsupported version: " + version);
+    }
 
     // Skip header of file
     skipUntil(in, "#", 2);
@@ -122,7 +133,6 @@ Route::Route(QString fileName)
             trackElementsByStartX[intStartX]->append(te);
         }
 
-        //if (startX > endX || ((startX - endX < 0.00001) && startY < endY)) {
         if (te->line().angle() > 90.0 && te->line().angle() <= 270.0) {
             trackElementsPointingLeft.append(te);
         }
@@ -180,34 +190,56 @@ Route::Route(QString fileName)
 
     file.close();
 
-    int originalCount = trackElements.count();
+    // Mark starting points
+    foreach (TrackElement *te, startingPoints.keys()) {
+        te->setIsStartingPoint(true);
 
+        m_startingPoints.append(new StartingPoint(NULL, te->line().p1(), te->line().angle(), startingPoints[te]));
+
+        while (!te->hasSignal() && te->next.size() > 0) {
+            te = te->next.front();
+            te->setIsStartingPoint(true);
+        }
+    }
+
+    #ifdef REMOVE_OPPOSITES
     // Remove opposite direction elements
-   /* foreach (TrackElement *te, trackElementsPointingLeft) {
+    int originalCount = trackElements.count();
+    foreach (TrackElement *te, trackElementsPointingLeft) {
+        if (!trackElements.contains(te->number())) {
+            continue;
+        }
+
         int oppositeStartX = (int)te->line().p2().x();
         if (trackElementsByStartX.contains(oppositeStartX)) {
             foreach (TrackElement *possibleOpposite, *trackElementsByStartX[oppositeStartX]) {
                 if (te->isOppositeOf(possibleOpposite)) {
-                    trackElements.remove(possibleOpposite->number);
-                    te->bothDirections = true;
-                    // TODO: Add signal again
-
+                    possibleOpposite->deleteFromNeighbors();
+                    trackElements.remove(possibleOpposite->number());
+                    te->setIsStartingPoint(te->isStartingPoint() || possibleOpposite->isStartingPoint());
+                    te->setBothDirections(true);
                     break;
                 }
             }
         }
-    }*/
+    }
 
     qDebug() << "Removed" << (originalCount - trackElements.count()) << "elements, now" << trackElements.count();
+    #endif
 
+    // Create segments from track elements
     foreach (TrackElement *te, trackElements) {
-        if (te == NULL) { qDebug() << "NULL"; continue; }
         if (!te->isStartingPointOfSegment()) { continue; }
 
         QGraphicsPathItem *pathItem = new QGraphicsPathItem();
+        QPainterPath path;
+        pathItem->setZValue(0);
 
-        QColor penColor = te->electrified() ? Qt::black : Qt::darkGray;
-        // penColor = QColor(qrand() % 256, qrand() % 256, qrand() % 256);
+        #ifdef RANDOM_COLORS
+        QColor penColor = QColor(qrand() % 256, qrand() % 256, qrand() % 256);
+        # else
+        QColor penColor = te->isStartingPoint() ? (te->electrified() ? Qt::darkGreen : Qt::green) : (te->electrified() ? Qt::black : Qt::darkGray);
+        # endif
 
         pathItem->setPen(QPen(
                              QBrush(penColor),
@@ -215,19 +247,19 @@ Route::Route(QString fileName)
                              te->tunnel() ? Qt::DotLine : Qt::SolidLine,
                              Qt::FlatCap));
 
-        QVector<QPointF> points;
-        points.append(te->line().p1());
-        points.append(te->line().p2());
+        path.moveTo(te->shiftedLine().p1());
+        path.lineTo(te->shiftedLine().p2());
+        double pathLength = te->line().length();
 
         while (te->next.size() > 0 && te->next.front()->prev.front() == te && !te->next.front()->isStartingPointOfSegment()) {
             te = te->next.front();
-            points.append(te->line().p2());
 
+            path.lineTo(te->shiftedLine().p2());
+            pathLength += te->line().length();
         }
 
-        QPainterPath path;
-        path.addPolygon(QPolygonF(points));
-        // path.addRect(points.last().x(), points.last().y(), 1, 1);
+        // TODO Draw little arrows to indicate the direction of the track element
+
         pathItem->setPath(path);
         m_trackSegments.append(pathItem);
     }

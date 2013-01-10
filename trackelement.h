@@ -3,24 +3,35 @@
 
 #include <QString>
 #include <QLineF>
+#include <vector>
 
 class TrackElement
 {
 public:
     TrackElement(const int number) {
         this->m_number = number;
+        this->m_bothDirections = false;
         this->m_isStartingPoint = false;
         this->m_hasSignal = false;
     }
 
     // The successor elements of this element
-    std::vector<TrackElement*> next; // = std::vector<TrackElement*>(3);
+    std::vector<TrackElement*> next;
 
     // The predecessor elements of this element
     std::vector<TrackElement*> prev;
 
+    // Returns whether this track element and te point in the opposite direction
     bool isOppositeOf(TrackElement *te);
+
+    // Returns whether this track element should start a new track segment
     bool isStartingPointOfSegment();
+
+    // Deletes a track element from its predecessor and successor elements
+    void deleteFromNeighbors();
+
+    // Returns this element’s line shifted 0.5px to the right if this element is a single direction element
+    QLineF shiftedLine();
 
     QLineF line() {  return m_line; }
     int number() { return m_number; }

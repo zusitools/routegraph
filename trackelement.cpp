@@ -28,3 +28,41 @@ bool TrackElement::isStartingPointOfSegment()
     TrackElement *pred = prev.front();
     return (pred->next.front() != this) || (pred->electrified() ^ this->m_electrified) || (pred->bothDirections() ^ this->m_bothDirections) || (pred->tunnel() ^ this->m_tunnel)  || (pred->isStartingPoint() ^ this->m_isStartingPoint);
 }
+
+void TrackElement::deleteFromNeighbors()
+{
+    std::vector<TrackElement*>::iterator iter1;
+    std::vector<TrackElement*>::iterator iter2;
+
+    // Remove this element as a predecessor of all successor elements
+    for (iter1 = next.begin(); iter1 != next.end(); ++iter1) {
+        TrackElement *successor = *iter1;
+        for (iter2 = successor->prev.begin(); iter2 != successor->prev.end(); ++iter2) {
+            if ((*iter2) == this) {
+                successor->prev.erase(iter2);
+                break;
+            }
+        }
+    }
+
+    // Remove this element as a successor of all successor elements
+    for (iter1 = prev.begin(); iter1 != prev.end(); ++iter1) {
+        TrackElement *predecessor = *iter1;
+        for (iter2 = predecessor->next.begin(); iter2 != predecessor->next.end(); ++iter2) {
+            if ((*iter2) == this) {
+                predecessor->next.erase(iter2);
+                break;
+            }
+        }
+    }
+}
+
+QLineF TrackElement::shiftedLine()
+{
+    if (!this->m_bothDirections) {
+        double angle = (this->line().angle() / 180 * M_PI); // angle in radian
+        return this->line().translated(QPointF(sin(angle) * 0.5, cos(angle) * 0.5));
+    } else {
+        return this->m_line;
+    }
+}
