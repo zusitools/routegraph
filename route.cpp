@@ -51,9 +51,17 @@ Route::Route(QString fileName)
 
     QHash<int, QList<TrackElement*>*> trackElementsByStartX;
     QList<TrackElement*> trackElementsPointingLeft;
+    QHash<TrackElement*, QString> startingPoints;
 
-    // Read 3 occurrences of "#"
-    skipUntil(in, "#", 3);
+    // Skip header of file
+    skipUntil(in, "#", 2);
+    skipLine(in, 2);
+
+    // Read starting points
+    while (in.readLine() != "#") {
+        int number = in.readLine().toInt();
+        startingPoints.insert(getTrackElement(number), in.readLine());
+    }
 
     // Read trackside viewpoints
     QString line;

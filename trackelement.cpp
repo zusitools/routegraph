@@ -26,5 +26,5 @@ bool TrackElement::isStartingPointOfSegment()
     //  - it differs from its predecessors in a property (electrified, bothDirections, tunnel)
     // If there are multiple predecessors, the first predecessor is taken.
     TrackElement *pred = prev.front();
-    return (pred->next.front() != this) || (pred->electrified() ^ this->m_electrified) || (pred->bothDirections() ^ this->m_bothDirections) || (pred->tunnel() ^ this->m_tunnel);
+    return (pred->next.front() != this) || (pred->electrified() ^ this->m_electrified) || (pred->bothDirections() ^ this->m_bothDirections) || (pred->tunnel() ^ this->m_tunnel)  || (pred->isStartingPoint() ^ this->m_isStartingPoint);
 }

@@ -9,6 +9,7 @@ class TrackElement
 public:
     TrackElement(const int number) {
         this->m_number = number;
+        this->m_isStartingPoint = false;
         this->m_hasSignal = false;
     }
 
@@ -26,12 +27,14 @@ public:
     bool electrified() { return m_electrified; }
     bool tunnel() { return m_tunnel; }
     bool bothDirections() { return m_bothDirections; }
+    bool isStartingPoint() { return m_isStartingPoint; }
     bool hasSignal() { return m_hasSignal; }
 
     void setLine(const QLineF line) { m_line = line; }
     void setElectrified(const bool electrified) { m_electrified = electrified; }
     void setTunnel(const bool tunnel) { m_tunnel = tunnel; }
     void setBothDirections(const bool bothDirections) { m_bothDirections = bothDirections; }
+    void setIsStartingPoint(const bool isStartingPoint) { m_isStartingPoint = isStartingPoint; }
     void setHasSignal(const bool hasSignal) { m_hasSignal = hasSignal; }
 
 private:
@@ -40,6 +43,7 @@ private:
     bool m_electrified;
     bool m_tunnel;
     bool m_bothDirections;
+    bool m_isStartingPoint;
     bool m_hasSignal;
 };
 

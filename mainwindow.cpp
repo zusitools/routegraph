@@ -64,6 +64,9 @@ void MainWindow::fileOpenTriggered()
     }
 
     trackView->scale(0.1, 0.1);
+    foreach (StartingPoint* sp, *(m_route->startingPoints())) {
+        trackView->scene()->addItem(sp);
+    }
 }
 
 void MainWindow::textScaleTriggered(bool on)
