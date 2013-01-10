@@ -1,6 +1,8 @@
 #include "label.h"
 
 #include <QPainter>
+#include <QStyleOptionGraphicsItem>
+#include <QDebug>
 
 Label::Label(const QString text, QGraphicsItem *parent) : QGraphicsSimpleTextItem(text, parent)
 {
