@@ -28,6 +28,13 @@ private:
     QList<Signal*> m_signals;
     QList<ViewPoint*> m_viewPoints;
     QList<StartingPoint*> m_startingPoints;
+
+    /**
+     * Returns the track element with the specified number, creating a new
+     * entry in the track element hash map if necessary.
+     * @param number The number of the track element
+     * @return The track element with the specified number.
+     */
     TrackElement *getTrackElement(const int number);
 };
 
