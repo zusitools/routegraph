@@ -20,7 +20,7 @@
 // #define RANDOM_COLORS
 
 void skipLine(QTextStream &ts, int count = 1) {
-    for (int i = 0; i < count; i++) {
+    for (int i = 0; i < count && !ts.atEnd(); i++) {
         ts.readLine();
     }
 }
