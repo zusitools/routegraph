@@ -7,18 +7,16 @@
 #include <QWidget>
 #include <QStyleOptionGraphicsItem>
 
-#define VIEWPOINTSIZE 50
-
 class ViewPoint : public QGraphicsItem
 {
 public:
-    ViewPoint(const QString name, const float phiZ, QGraphicsItem *parent = 0);
+    ViewPoint(QGraphicsItem *parent = 0, const qreal phi = 0, const QString name = QString());
 
-    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
-    virtual QRectF boundingRect() const;
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
+    virtual QRectF boundingRect() const override;
 
-private:
-    float phiZ;
+protected:
+    qreal m_angle;
 };
 
 #endif // VIEWPOINT_H

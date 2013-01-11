@@ -83,10 +83,10 @@ Route::Route(QString fileName)
         float x = -in.readLine().replace(',', '.').toFloat();
         skipLine(in, 3);
 
-        float phiZ = in.readLine().replace(',', '.').toFloat() + M_PI;
+        float phiZ = in.readLine().replace(',', '.').toFloat();
         QString name = in.readLine();
 
-        ViewPoint *vp = new ViewPoint(name, phiZ);
+        ViewPoint *vp = new ViewPoint(NULL, phiZ, name);
         vp->setPos(x, y);
         m_viewPoints.append(vp);
     }
