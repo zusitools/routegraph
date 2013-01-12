@@ -236,7 +236,7 @@ Route::Route(QString fileName)
     foreach (TrackElement *te, trackElements) {
         if (!te->isStartingPointOfSegment()) { continue; }
 
-        QGraphicsPathItem *pathItem = new QGraphicsPathItem();
+        TrackSegment *pathItem = new TrackSegment();
         QPainterPath path;
         pathItem->setZValue(0);
 

@@ -21,7 +21,8 @@ SOURCES += main.cpp\
     label.cpp \
     marker.cpp \
     signal.cpp \
-    startingpoint.cpp
+    startingpoint.cpp \
+    tracksegment.cpp
 
 HEADERS  += mainwindow.h \
     route.h \
@@ -31,7 +32,8 @@ HEADERS  += mainwindow.h \
     label.h \
     marker.h \
     signal.h \
-    startingpoint.h
+    startingpoint.h \
+    tracksegment.h
 
 FORMS    += mainwindow.ui
 
