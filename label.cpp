@@ -23,12 +23,6 @@ QRectF Label::boundingRect() const {
     return result;
 }
 
-QRectF Label::totalBoundingRect()
-{
-    QRectF boundingRect = this->boundingRect();
-    return QRectF(-boundingRect.width(), -boundingRect.height(), 2 * boundingRect.width(), 2 * boundingRect.height());
-}
-
 void Label::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option);
@@ -36,9 +30,4 @@ void Label::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
 
     painter->setPen(this->pen());
     painter->drawText(this->boundingRect(), this->text());
-
-    /* painter->setBrush(Qt::NoBrush);
-    painter->drawRect(this->boundingRect());
-    painter->drawRect(QRectF(-this->boundingRect().width(), -this->boundingRect().height(),
-                             2 * this->boundingRect().width(), 2 * this->boundingRect().height())); */
 }
