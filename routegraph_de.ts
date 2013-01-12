@@ -24,27 +24,47 @@
         <translation>Ö&amp;ffnen</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="62"/>
+        <location filename="mainwindow.ui" line="57"/>
+        <source>Ctrl+O</source>
+        <translation>Ctrl+O</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="65"/>
         <source>&amp;Text scaling</source>
         <translation>&amp;Text skaliert mit</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="76"/>
+        <location filename="mainwindow.ui" line="79"/>
         <source>&amp;Signal names</source>
         <translation>&amp;Signalnamen</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="87"/>
+        <location filename="mainwindow.ui" line="82"/>
+        <source>S</source>
+        <translation>S</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="93"/>
         <source>&amp;View point names</source>
         <translation>Namen der streckenseitigen &amp;Beobachtungspunkte</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="98"/>
+        <location filename="mainwindow.ui" line="96"/>
+        <source>V</source>
+        <translation>B</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="107"/>
         <source>St&amp;arting point names</source>
         <translation>Namen der &amp;Aufgleispunkte</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="109"/>
+        <location filename="mainwindow.ui" line="110"/>
+        <source>T</source>
+        <translation>A</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="121"/>
         <source>A&amp;nti-aliasing</source>
         <translation>&amp;Kantenglättung</translation>
     </message>

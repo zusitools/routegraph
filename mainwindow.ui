@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>847</width>
-    <height>497</height>
+    <width>845</width>
+    <height>495</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -25,7 +25,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>847</width>
+     <width>845</width>
      <height>19</height>
     </rect>
    </property>
@@ -53,6 +53,9 @@
    <property name="text">
     <string>&amp;Open</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
   </action>
   <action name="actionTextScaling">
    <property name="checkable">
@@ -75,6 +78,9 @@
    <property name="text">
     <string>&amp;Signal names</string>
    </property>
+   <property name="shortcut">
+    <string>S</string>
+   </property>
   </action>
   <action name="actionShowViewPointNames">
    <property name="checkable">
@@ -86,6 +92,9 @@
    <property name="text">
     <string>&amp;View point names</string>
    </property>
+   <property name="shortcut">
+    <string>V</string>
+   </property>
   </action>
   <action name="actionShowStartingPointNames">
    <property name="checkable">
@@ -96,6 +105,9 @@
    </property>
    <property name="text">
     <string>St&amp;arting point names</string>
+   </property>
+   <property name="shortcut">
+    <string>T</string>
    </property>
   </action>
   <action name="actionAntiAliasing">
