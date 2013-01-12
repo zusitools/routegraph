@@ -79,23 +79,37 @@ void MainWindow::fileOpenTriggered()
     trackView->fitInView(trackView->sceneRect(), Qt::KeepAspectRatio);
 }
 
+void triggerTextScale(Label *label, bool on) {
+    if (label) {
+        label->setFlag(QGraphicsItem::ItemIgnoresTransformations, !on);
+        label->font().setPointSize(on ? 30 : 8);
+    }
+}
+
 void MainWindow::textScaleTriggered(bool on)
 {
-    if (!trackView->scene()) {
+    if (!m_route) {
         return;
     }
 
-    foreach (QGraphicsItem *item, trackView->scene()->items()) {
-        foreach (QGraphicsItem *childItem, item->childItems()) {
+    foreach (ViewPoint* vp, *(m_route->viewPoints())) {
+        triggerTextScale(vp->label(), on);
+    }
 
-            // HACK
-            Label *childItemAsLabel = dynamic_cast<Label*>(childItem);
+    foreach (Signal* sig, *(m_route->signalList())) {
+        triggerTextScale(sig->label(), on);
+    }
 
-            if (childItemAsLabel) {
-                qDebug() << childItemAsLabel->font().pointSize();
-                childItem->setFlag(QGraphicsItem::ItemIgnoresTransformations, !on);
-                childItemAsLabel->font().setPointSize(on ? 30 : 8);
-            }
+    foreach (StartingPoint* sp, *(m_route->startingPoints())) {
+        triggerTextScale(sp->label(), on);
+    }
+}
+
+void MainWindow::showViewPointNamesTriggered(bool on)
+{
+    if (m_route) {
+        foreach (ViewPoint* vp, *(m_route->viewPoints())) {
+            vp->label()->setVisible(on);
         }
     }
 }

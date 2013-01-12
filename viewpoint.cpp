@@ -13,18 +13,23 @@ ViewPoint::ViewPoint(QGraphicsItem *parent, const qreal phi, const QString name)
     // Angle 0 is pointing downward
     this->m_angle = fmod(phi + M_PI, 2 * M_PI);
 
-    Label *label = new Label(name, this);
-    label->setPen(QPen(Qt::blue));
+    this->m_label = new Label(name, this);
+    m_label->setPen(QPen(Qt::blue));
 
     if (m_angle - M_PI < 0.0001 || m_angle <= M_PI / 2) {
-        label->setAlignment(Qt::AlignLeft | Qt::AlignBottom);
+        m_label->setAlignment(Qt::AlignLeft | Qt::AlignBottom);
     } else if (m_angle <= M_PI) {
-        label->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+        m_label->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     } else if (m_angle <= 3 * M_PI / 2) {
-        label->setAlignment(Qt::AlignRight | Qt::AlignTop);
+        m_label->setAlignment(Qt::AlignRight | Qt::AlignTop);
     } else {
-        label->setAlignment(Qt::AlignRight | Qt::AlignBottom);
+        m_label->setAlignment(Qt::AlignRight | Qt::AlignBottom);
     }
+}
+
+ViewPoint::~ViewPoint()
+{
+    delete m_label;
 }
 
 void ViewPoint::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)

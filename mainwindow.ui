@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>851</width>
-    <height>501</height>
+    <width>847</width>
+    <height>497</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Zusi Route Graph</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
@@ -25,31 +25,88 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>851</width>
+     <width>847</width>
      <height>19</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuDatei">
+   <widget class="QMenu" name="menuFile">
     <property name="title">
-     <string>Datei</string>
+     <string>&amp;File</string>
     </property>
-    <addaction name="action_ffnen"/>
-    <addaction name="actionTextvergr_erung"/>
+    <addaction name="actionOpen"/>
    </widget>
-   <addaction name="menuDatei"/>
+   <widget class="QMenu" name="menu_View">
+    <property name="title">
+     <string>&amp;View</string>
+    </property>
+    <addaction name="actionShowSignalNames"/>
+    <addaction name="actionShowViewPointNames"/>
+    <addaction name="actionShowStartingPointNames"/>
+    <addaction name="separator"/>
+    <addaction name="actionTextScaling"/>
+    <addaction name="actionAntiAliasing"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menu_View"/>
   </widget>
-  <widget class="QStatusBar" name="statusBar"/>
-  <action name="action_ffnen">
+  <action name="actionOpen">
    <property name="text">
-    <string>&amp;Öffnen</string>
+    <string>&amp;Open</string>
    </property>
   </action>
-  <action name="actionTextvergr_erung">
+  <action name="actionTextScaling">
    <property name="checkable">
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Text skaliert mit</string>
+    <string>&amp;Text scaling</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionShowSignalNames">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Signal names</string>
+   </property>
+  </action>
+  <action name="actionShowViewPointNames">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;View point names</string>
+   </property>
+  </action>
+  <action name="actionShowStartingPointNames">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>St&amp;arting point names</string>
+   </property>
+  </action>
+  <action name="actionAntiAliasing">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>A&amp;nti-aliasing</string>
    </property>
   </action>
  </widget>
@@ -57,7 +114,7 @@
  <resources/>
  <connections>
   <connection>
-   <sender>action_ffnen</sender>
+   <sender>actionOpen</sender>
    <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
    <slot>fileOpenTriggered()</slot>
@@ -73,7 +130,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>actionTextvergr_erung</sender>
+   <sender>actionTextScaling</sender>
    <signal>toggled(bool)</signal>
    <receiver>MainWindow</receiver>
    <slot>textScaleTriggered(bool)</slot>
@@ -88,9 +145,77 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionShowSignalNames</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>showSignalNamesTriggered(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>423</x>
+     <y>248</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionShowStartingPointNames</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>showStartingPointNamesTriggered(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>423</x>
+     <y>248</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionShowViewPointNames</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>showViewPointNamesTriggered(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>423</x>
+     <y>248</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionAntiAliasing</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>antiAliasingTriggered(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>423</x>
+     <y>248</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>fileOpenTriggered()</slot>
   <slot>textScaleTriggered(bool)</slot>
+  <slot>showSignalNamesTriggered(bool)</slot>
+  <slot>showViewPointNamesTriggered(bool)</slot>
+  <slot>showStartingPointNamesTriggered(bool)</slot>
+  <slot>antiAliasingTriggered(bool)</slot>
  </slots>
 </ui>
