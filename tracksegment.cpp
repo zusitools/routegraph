@@ -13,7 +13,6 @@ void TrackSegment::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     QPen pen = this->pen();
     qreal scaleFactor = painter->transform().m11();
 
-    qDebug() << scaleFactor;
     // Always make the pen at least 0.5 physical pixels thick.
     if (scaleFactor >= 0.5) {
         pen.setWidth(1);
