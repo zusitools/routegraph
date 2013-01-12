@@ -37,4 +37,6 @@ HEADERS  += mainwindow.h \
 
 FORMS    += mainwindow.ui
 
+TRANSLATIONS = routegraph_de.ts
+
 QMAKE_CXXFLAGS = -std=c++11

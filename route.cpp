@@ -63,7 +63,7 @@ Route::Route(QString fileName)
 
     QString version = in.readLine();
     if (version != "2.2" && version != "2.3" && version != "2.4") {
-        throw QString("Unsupported version: " + version);
+        throw QString(QObject::tr("Unsupported file format version: %1").arg(version));
     }
 
     // Skip header of file
