@@ -4,6 +4,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QDebug>
+#include <QSettings>
 
 #include "route.h"
 #include "trackelement.h"
@@ -17,14 +18,33 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     trackView = new TrackView;
-    trackView->setRenderHints(QPainter::Antialiasing);
     setCentralWidget(trackView);
 
     m_route = NULL;
+
+    // Read settings
+    QSettings settings;
+    ui->actionAntiAliasing->setChecked(settings.value("view/antiAliasing", true).toBool());
+    ui->actionShowSignalNames->setChecked(settings.value("view/showSignalNames", true).toBool());
+    ui->actionShowStartingPointNames->setChecked(settings.value("view/showStartingPointNames", false).toBool());
+    ui->actionShowViewPointNames->setChecked(settings.value("view/showViewPointNames", false).toBool());
+    ui->actionTextScaling->setChecked(settings.value("view/textScaling", false).toBool());
+
+    this->resize(settings.value("mainwindow/size", this->size()).toSize());
 }
 
 MainWindow::~MainWindow()
 {
+    // Save settings
+    QSettings settings;
+    settings.setValue("view/antiAliasing", ui->actionAntiAliasing->isChecked());
+    settings.setValue("view/showSignalNames", ui->actionShowSignalNames->isChecked());
+    settings.setValue("view/showStartingPointNames", ui->actionShowStartingPointNames->isChecked());
+    settings.setValue("view/showViewPointNames", ui->actionShowViewPointNames->isChecked());
+    settings.setValue("view/textScaling", ui->actionTextScaling->isChecked());
+
+    settings.setValue("mainwindow/size", this->size());
+
     delete ui;
 
     if (m_route) {
@@ -75,6 +95,13 @@ void MainWindow::fileOpenTriggered()
         scene->addItem(sp);
     }
 
+    showViewPointNamesTriggered(ui->actionShowViewPointNames->isChecked());
+    showStartingPointNamesTriggered(ui->actionShowStartingPointNames->isChecked());
+    showSignalNamesTriggered(ui->actionShowSignalNames->isChecked());
+
+    textScaleTriggered(ui->actionTextScaling->isChecked());
+    antiAliasingTriggered(ui->actionAntiAliasing->isChecked());
+
     trackView->setScene(scene);
     trackView->fitInView(trackView->sceneRect(), Qt::KeepAspectRatio);
 }
@@ -111,5 +138,32 @@ void MainWindow::showViewPointNamesTriggered(bool on)
         foreach (ViewPoint* vp, *(m_route->viewPoints())) {
             vp->label()->setVisible(on);
         }
+    }
+}
+
+void MainWindow::showStartingPointNamesTriggered(bool on)
+{
+    if (m_route) {
+        foreach (StartingPoint* sp, *(m_route->startingPoints())) {
+            sp->label()->setVisible(on);
+        }
+    }
+}
+
+void MainWindow::showSignalNamesTriggered(bool on)
+{
+    if (m_route) {
+        foreach (Signal* sig, *(m_route->signalList())) {
+            sig->label()->setVisible(on);
+        }
+    }
+}
+
+void MainWindow::antiAliasingTriggered(bool on)
+{
+    if (on) {
+        trackView->setRenderHints(trackView->renderHints() | QPainter::Antialiasing);
+    } else {
+        trackView->setRenderHints(trackView->renderHints() & ~QPainter::Antialiasing);
     }
 }

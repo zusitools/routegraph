@@ -21,6 +21,10 @@ public:
 public slots:
     void fileOpenTriggered();
     void textScaleTriggered(bool on);
+    void showViewPointNamesTriggered(bool on);
+    void showStartingPointNamesTriggered(bool on);
+    void showSignalNamesTriggered(bool on);
+    void antiAliasingTriggered(bool on);
 
 private:
     Ui::MainWindow *ui;
