@@ -7,6 +7,7 @@
 #include <QGraphicsPathItem>
 
 #include "trackelement.h"
+#include "tracksegment.h"
 #include "viewpoint.h"
 #include "startingpoint.h"
 #include "signal.h"
