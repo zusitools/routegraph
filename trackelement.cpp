@@ -74,8 +74,9 @@ void TrackElement::deleteFromNeighbors()
 QLineF TrackElement::shiftedLine()
 {
     if (!this->m_bothDirections) {
+        // Shift by a little less than one line width to prevent drawing artifacts for opposite segments
         double angle = (this->line().angle() / 180 * M_PI); // angle in radian
-        return this->line().translated(QPointF(sin(angle) * 0.5, cos(angle) * 0.5));
+        return this->line().translated(QPointF(sin(angle) * (0.95 / 2), cos(angle) * (0.95 / 2)));
     } else {
         return this->m_line;
     }

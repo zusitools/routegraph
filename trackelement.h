@@ -26,7 +26,7 @@ public:
     // Deletes a track element from its predecessor and successor elements
     void deleteFromNeighbors();
 
-    // Returns this element’s line shifted 0.5px to the right if this element is a single direction element
+    // Returns this element’s line shifted half a line width to the right if this element is a single direction element
     QLineF shiftedLine();
 
     QLineF line() {  return m_line; }
