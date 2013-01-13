@@ -1,7 +1,6 @@
 #ifndef ROUTE_H
 #define ROUTE_H
 
-#include <QString>
 #include <QList>
 #include <QHash>
 #include <QGraphicsPathItem>

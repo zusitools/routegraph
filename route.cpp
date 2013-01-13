@@ -110,7 +110,7 @@ Route::Route(QString fileName)
 
         double startY = -in.readLine().replace(',', '.').toDouble();
         double startX = -in.readLine().replace(',', '.').toDouble();
-        double startZ = in.readLine().replace(',', '.').toDouble();
+        skipLine(in);
 
         if (startX < minX) { minX = startX; }
         if (startY < minY) { minY = startY; }
@@ -119,9 +119,7 @@ Route::Route(QString fileName)
 
         double endY = -in.readLine().replace(',', '.').toDouble();
         double endX = -in.readLine().replace(',', '.').toDouble();
-        double endZ = in.readLine().replace(',', '.').toDouble();
-
-        // te->setZValue((startZ + endZ) / 2);
+        skipLine(in);
 
         skipLine(in);
 
@@ -176,7 +174,7 @@ Route::Route(QString fileName)
             QString signal = in.readLine();
 
             if (!station.isEmpty() && !signal.isEmpty()) {
-                Signal *sig = new Signal(NULL, te->line().p2(), te->line().angle(), station + ", " + signal /* + " (" + QString::number(te->number()) + ")" */);
+                Signal *sig = new Signal(NULL, te->line().p2(), te->line().angle(), station + ", " + signal);
                 sig->setPos(te->line().p2());
                 m_signals.append(sig);
                 te->setHasSignal(true);
