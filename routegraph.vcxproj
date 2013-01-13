@@ -151,6 +151,7 @@
     <ClCompile Include="signal.cpp" />
     <ClCompile Include="startingpoint.cpp" />
     <ClCompile Include="trackelement.cpp" />
+    <ClCompile Include="tracksegment.cpp" />
     <ClCompile Include="trackview.cpp" />
     <ClCompile Include="viewpoint.cpp" />
   </ItemGroup>
@@ -182,6 +183,7 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing trackview.h...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ConfigurationName)\moc_%(Filename).cpp;%(Outputs)</Outputs>
     </CustomBuild>
+    <ClInclude Include="tracksegment.h" />
     <ClInclude Include="viewpoint.h" />
   </ItemGroup>
   <ItemGroup>
