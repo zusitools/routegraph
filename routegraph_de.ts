@@ -19,54 +19,84 @@
         <translation>&amp;Ansicht</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="54"/>
+        <location filename="mainwindow.ui" line="58"/>
         <source>&amp;Open</source>
         <translation>Ö&amp;ffnen</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="57"/>
+        <location filename="mainwindow.ui" line="61"/>
         <source>Ctrl+O</source>
         <translation>Ctrl+O</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="65"/>
+        <location filename="mainwindow.ui" line="69"/>
         <source>&amp;Text scaling</source>
         <translation>&amp;Text skaliert mit</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="79"/>
+        <location filename="mainwindow.ui" line="83"/>
         <source>&amp;Signal names</source>
         <translation>&amp;Signalnamen</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="82"/>
+        <location filename="mainwindow.ui" line="86"/>
         <source>S</source>
         <translation>S</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="93"/>
+        <location filename="mainwindow.ui" line="97"/>
         <source>&amp;View point names</source>
         <translation>Namen der streckenseitigen &amp;Beobachtungspunkte</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="96"/>
+        <location filename="mainwindow.ui" line="100"/>
         <source>V</source>
         <translation>B</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="107"/>
+        <location filename="mainwindow.ui" line="111"/>
         <source>St&amp;arting point names</source>
         <translation>Namen der &amp;Aufgleispunkte</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="110"/>
+        <location filename="mainwindow.ui" line="114"/>
         <source>T</source>
         <translation>A</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="121"/>
+        <location filename="mainwindow.ui" line="125"/>
         <source>A&amp;nti-aliasing</source>
         <translation>&amp;Kantenglättung</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="130"/>
+        <source>Zoom &amp;in</source>
+        <translation>&amp;Vergrößern</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="133"/>
+        <source>+</source>
+        <translation>+</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="138"/>
+        <source>Zoom &amp;out</source>
+        <translation>Ver&amp;kleinern</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="141"/>
+        <source>-</source>
+        <translation>-</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="146"/>
+        <source>&amp;Fit to window</source>
+        <translation>In Fenster &amp;einpassen</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="149"/>
+        <source>1</source>
+        <translation>1</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="57"/>

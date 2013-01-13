@@ -25,6 +25,9 @@ public slots:
     void showStartingPointNamesTriggered(bool on);
     void showSignalNamesTriggered(bool on);
     void antiAliasingTriggered(bool on);
+    void zoomInTriggered();
+    void zoomOutTriggered();
+    void zoomFitTriggered();
 
 private:
     Ui::MainWindow *ui;

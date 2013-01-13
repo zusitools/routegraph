@@ -167,3 +167,18 @@ void MainWindow::antiAliasingTriggered(bool on)
         trackView->setRenderHints(trackView->renderHints() & ~QPainter::Antialiasing);
     }
 }
+
+void MainWindow::zoomInTriggered()
+{
+    trackView->zoomIn();
+}
+
+void MainWindow::zoomOutTriggered()
+{
+    trackView->zoomOut();
+}
+
+void MainWindow::zoomFitTriggered()
+{
+    trackView->fitInView(trackView->sceneRect(), Qt::KeepAspectRatio);
+}

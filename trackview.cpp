@@ -24,7 +24,7 @@ void TrackView::wheelEvent(QWheelEvent *event)
     }
 }
 
-/*void TrackView::zoomIn()
+void TrackView::zoomIn()
 {
     scaleBy(1.1);
 }
@@ -33,4 +33,3 @@ void TrackView::zoomOut()
 {
     scaleBy(1.0 / 1.1);
 }
-*/

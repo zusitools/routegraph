@@ -12,6 +12,8 @@ public:
 
     void scaleBy(double factor);
     void wheelEvent(QWheelEvent *event);
+    void zoomIn();
+    void zoomOut();
 
 signals:
 

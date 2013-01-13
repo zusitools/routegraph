@@ -39,6 +39,10 @@
     <property name="title">
      <string>&amp;View</string>
     </property>
+    <addaction name="actionZoomIn"/>
+    <addaction name="actionZoomOut"/>
+    <addaction name="actionZoomFit"/>
+    <addaction name="separator"/>
     <addaction name="actionShowSignalNames"/>
     <addaction name="actionShowViewPointNames"/>
     <addaction name="actionShowStartingPointNames"/>
@@ -119,6 +123,30 @@
    </property>
    <property name="text">
     <string>A&amp;nti-aliasing</string>
+   </property>
+  </action>
+  <action name="actionZoomIn">
+   <property name="text">
+    <string>Zoom &amp;in</string>
+   </property>
+   <property name="shortcut">
+    <string>+</string>
+   </property>
+  </action>
+  <action name="actionZoomOut">
+   <property name="text">
+    <string>Zoom &amp;out</string>
+   </property>
+   <property name="shortcut">
+    <string>-</string>
+   </property>
+  </action>
+  <action name="actionZoomFit">
+   <property name="text">
+    <string>&amp;Fit to window</string>
+   </property>
+   <property name="shortcut">
+    <string>1</string>
    </property>
   </action>
  </widget>
@@ -221,6 +249,54 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionZoomIn</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>zoomInTriggered()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>422</x>
+     <y>247</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionZoomOut</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>zoomOutTriggered()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>422</x>
+     <y>247</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionZoomFit</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>zoomFitTriggered()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>422</x>
+     <y>247</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>fileOpenTriggered()</slot>
@@ -229,5 +305,8 @@
   <slot>showViewPointNamesTriggered(bool)</slot>
   <slot>showStartingPointNamesTriggered(bool)</slot>
   <slot>antiAliasingTriggered(bool)</slot>
+  <slot>zoomInTriggered()</slot>
+  <slot>zoomOutTriggered()</slot>
+  <slot>zoomFitTriggered()</slot>
  </slots>
 </ui>
