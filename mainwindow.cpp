@@ -79,8 +79,12 @@ void MainWindow::fileOpenTriggered()
 
     QGraphicsScene* scene = new QGraphicsScene(this);
 
-    foreach (QGraphicsItem* pe, *(m_route->trackSegments())) {
-        scene->addItem(pe);
+    foreach (TrackSegment* te, *(m_route->trackSegments())) {
+        scene->addItem(te);
+    }
+
+    foreach (QGraphicsPathItem* arrowPath, *(m_route->arrows())) {
+        scene->addItem(arrowPath);
     }
 
     foreach (ViewPoint* vp, *(m_route->viewPoints())) {

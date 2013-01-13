@@ -4,7 +4,9 @@
 #include <QTextStream>
 #include <QDebug>
 #include <QHash>
+#include <QMap>
 #include <QList>
+#include <QPointF>
 #include <QPolygonF>
 #include <QGraphicsPolygonItem>
 
@@ -18,6 +20,10 @@
 
 // Uncomment this to give each segment a random color
 // #define RANDOM_COLORS
+
+#define ARROWEVERY 100
+#define ARROWLENGTH 10.0
+#define ARROWANGLE asin(0.95 / ARROWLENGTH)
 
 void skipLine(QTextStream &ts, int count = 1) {
     for (int i = 0; i < count && !ts.atEnd(); i++) {
@@ -236,9 +242,16 @@ Route::Route(QString fileName)
     foreach (TrackElement *te, trackElements) {
         if (!te->isStartingPointOfSegment()) { continue; }
 
+        // Construct two path items: one for the track segment and one for the segment’s direction arrows,
+        // the latter positioned below. This is to prevent overlap on routes which can be used in both direction.
+        // The arrows are not shown for tunnel segments because it looks ugly.
         TrackSegment *pathItem = new TrackSegment();
+        QGraphicsPathItem *pathArrowsItem = new QGraphicsPathItem();
         QPainterPath path;
+        QPainterPath arrowPath;
+
         pathItem->setZValue(0);
+        pathArrowsItem->setZValue(-1);
 
         #ifdef RANDOM_COLORS
         QColor penColor = QColor(qrand() % 256, qrand() % 256, qrand() % 256);
@@ -252,6 +265,8 @@ Route::Route(QString fileName)
                              te->tunnel() ? Qt::DotLine : Qt::SolidLine,
                              Qt::FlatCap));
 
+        pathArrowsItem->setPen(QPen(QBrush(penColor), 1, Qt::SolidLine, Qt::FlatCap));
+
         path.moveTo(te->shiftedLine().p1());
         path.lineTo(te->shiftedLine().p2());
         double pathLength = te->line().length();
@@ -263,10 +278,42 @@ Route::Route(QString fileName)
             pathLength += te->line().length();
         }
 
-        // TODO Draw little arrows to indicate the direction of the track element
-
         pathItem->setPath(path);
         m_trackSegments.append(pathItem);
+
+        if (!te->tunnel()) {
+            // Draw little arrows to indicate the direction of the track element.
+            // The arrows are drawn every ARROWEVERY meters, but at least once per track segment.
+            // They also are drawn at least ARROWLENGTH m from the beginning of the track segment.
+            int numArrows = ((pathLength - ARROWLENGTH) / ARROWEVERY) + 1;
+            double firstArrowPos = ARROWLENGTH + (pathLength - ARROWLENGTH - ARROWEVERY * (numArrows - 1)) / 2;
+
+            // Store arrow base points in a map beforehand because drawing them one after another could
+            // influence the computation of the following points.
+            // We have to store pointers to the points in the map because QPointF does not implement operator<.
+            QMap<QPointF*, qreal> arrowBasePoints;
+            for (int i = 0; i < numArrows; i++) {
+
+                // Take the maximum of the angles at the arrow base and arrow end to prevent arrows from
+                // pointing outside the opposite track segment in curves
+                qreal percentArrowBase = std::min(1.0, (firstArrowPos + ARROWEVERY * i) / pathLength);
+                qreal percentArrowEnd = std::max(0.0, (firstArrowPos + ARROWEVERY * i - ARROWLENGTH) / pathLength);
+
+                arrowBasePoints.insert(new QPointF(path.pointAtPercent(percentArrowBase)),
+                                       std::max(path.angleAtPercent(percentArrowBase), path.angleAtPercent(percentArrowEnd)) / 180 * M_PI);
+            }
+
+            foreach (QPointF* arrowBasePoint, arrowBasePoints.keys()) {
+                qreal angle = M_PI - arrowBasePoints[arrowBasePoint] + ARROWANGLE;
+
+                arrowPath.moveTo(*arrowBasePoint);
+                arrowPath.lineTo(*arrowBasePoint + QPointF(cos(angle) * ARROWLENGTH, sin(angle) * ARROWLENGTH));
+            }
+
+            qDeleteAll(arrowBasePoints.keys());
+            pathArrowsItem->setPath(arrowPath);
+            m_arrows.append(pathArrowsItem);
+        }
     }
 
     qDebug() << m_trackSegments.count() << "track segments";

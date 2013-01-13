@@ -18,14 +18,16 @@ public:
     Route(QString fileName);
     ~Route();
 
-    QList<QGraphicsPathItem*> *trackSegments() { return &m_trackSegments; }
+    QList<TrackSegment*> *trackSegments() { return &m_trackSegments; }
+    QList<QGraphicsPathItem*> *arrows() { return &m_arrows; }
     QList<ViewPoint*> *viewPoints() { return &m_viewPoints; }
     QList<StartingPoint*> *startingPoints() { return &m_startingPoints; }
     QList<Signal*> *signalList() { return &m_signals; } // Can't use "signals" because it is a reserved Qt keyword
 
 private:
     QHash<int, TrackElement*> trackElements;
-    QList<QGraphicsPathItem*> m_trackSegments;
+    QList<TrackSegment*> m_trackSegments;
+    QList<QGraphicsPathItem*> m_arrows;
     QList<Signal*> m_signals;
     QList<ViewPoint*> m_viewPoints;
     QList<StartingPoint*> m_startingPoints;
