@@ -99,6 +99,10 @@ void MainWindow::fileOpenTriggered()
         scene->addItem(sp);
     }
 
+    foreach (Wendepunkt* wp, *(m_route->wendepunkte())) {
+        scene->addItem(wp);
+    }
+
     showViewPointNamesTriggered(ui->actionShowViewPointNames->isChecked());
     showStartingPointNamesTriggered(ui->actionShowStartingPointNames->isChecked());
     showSignalNamesTriggered(ui->actionShowSignalNames->isChecked());

@@ -107,7 +107,9 @@ Route::Route(QString fileName)
     while (!in.atEnd()) {
         int elementNumber = in.readLine().toInt();
         TrackElement *te = getTrackElement(elementNumber);
-        skipLine(in, 4);
+        skipLine(in, 3);
+
+        int ereignis = in.readLine().toInt();
 
         double startY = -in.readLine().replace(',', '.').toDouble();
         double startX = -in.readLine().replace(',', '.').toDouble();
@@ -130,6 +132,14 @@ Route::Route(QString fileName)
         if (endY > maxY) { maxY = endY; }
 
         te->setLine(QLineF(startX, startY, endX, endY));
+
+        // Read Ereignisse only after setting the track element coordinates
+        if (ereignis == 3036 || ereignis == 3037) {
+            // Wendepunkt / Wendepunkt auf anderen Blocknamen
+            Wendepunkt *wendepunkt = new Wendepunkt(0, te->line().angle());
+            wendepunkt->setPos(te->line().p2());
+            m_wendepunkte.append(wendepunkt);
+        }
 
         #ifdef REMOVE_OPPOSITES
         int intStartX = (int)startX;
@@ -326,5 +336,6 @@ Route::~Route()
     qDeleteAll(m_trackSegments);
     qDeleteAll(m_signals);
     qDeleteAll(m_viewPoints);
+    qDeleteAll(m_wendepunkte);
     qDeleteAll(m_startingPoints);
 }

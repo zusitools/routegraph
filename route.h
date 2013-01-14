@@ -9,6 +9,7 @@
 #include "tracksegment.h"
 #include "viewpoint.h"
 #include "startingpoint.h"
+#include "wendepunkt.h"
 #include "signal.h"
 
 class Route
@@ -21,6 +22,7 @@ public:
     QList<QGraphicsPathItem*> *arrows() { return &m_arrows; }
     QList<ViewPoint*> *viewPoints() { return &m_viewPoints; }
     QList<StartingPoint*> *startingPoints() { return &m_startingPoints; }
+    QList<Wendepunkt*> *wendepunkte() { return &m_wendepunkte; }
     QList<Signal*> *signalList() { return &m_signals; } // Can't use "signals" because it is a reserved Qt keyword
 
 private:
@@ -30,6 +32,7 @@ private:
     QList<Signal*> m_signals;
     QList<ViewPoint*> m_viewPoints;
     QList<StartingPoint*> m_startingPoints;
+    QList<Wendepunkt*> m_wendepunkte;
 
     /**
      * Returns the track element with the specified number, creating a new

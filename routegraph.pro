@@ -22,7 +22,8 @@ SOURCES += main.cpp\
     marker.cpp \
     signal.cpp \
     startingpoint.cpp \
-    tracksegment.cpp
+    tracksegment.cpp \
+    wendepunkt.cpp
 
 HEADERS  += mainwindow.h \
     route.h \
@@ -34,6 +35,7 @@ HEADERS  += mainwindow.h \
     signal.h \
     startingpoint.h \
     tracksegment.h \
+    wendepunkt.h \
     zvalues.h
 
 FORMS    += mainwindow.ui
