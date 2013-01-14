@@ -14,7 +14,7 @@ class Label;
 class Marker: public QGraphicsItem
 {
 public:
-    Marker(QGraphicsItem *parent, QPointF pos, qreal phi, const QString text, const QColor color);
+    Marker(QGraphicsItem *parent, qreal phi, const QString text, const QColor color);
     ~Marker();
 
     QRectF boundingRect() const override;

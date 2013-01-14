@@ -6,7 +6,7 @@
 class Signal : public Marker
 {
 public:
-    Signal(QGraphicsItem *parent, const QPointF pos, qreal phi, const QString text);
+    Signal(QGraphicsItem *parent, qreal phi, const QString text);
 };
 
 #endif // SIGNAL_H

@@ -175,7 +175,7 @@ Route::Route(QString fileName)
             QString signal = in.readLine();
 
             if (!station.isEmpty() && !signal.isEmpty()) {
-                Signal *sig = new Signal(NULL, te->line().p2(), te->line().angle(), station + ", " + signal);
+                Signal *sig = new Signal(NULL, te->line().angle(), station + ", " + signal);
                 sig->setPos(te->line().p2());
                 m_signals.append(sig);
                 te->setHasSignal(true);
@@ -203,7 +203,9 @@ Route::Route(QString fileName)
     foreach (TrackElement *te, startingPoints.keys()) {
         te->setIsStartingPoint(true);
 
-        m_startingPoints.append(new StartingPoint(NULL, te->line().p1(), te->line().angle(), startingPoints[te]));
+        StartingPoint *startingPoint = new StartingPoint(NULL, te->line().angle(), startingPoints[te]);
+        startingPoint->setPos(te->line().p1());
+        m_startingPoints.append(startingPoint);
 
         while (!te->hasSignal() && te->next.size() > 0) {
             te = te->next.front();

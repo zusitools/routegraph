@@ -6,7 +6,7 @@
 class StartingPoint : public Marker
 {
 public:
-    StartingPoint(QGraphicsItem *parent, const QPointF pos, qreal phi, const QString text);
+    StartingPoint(QGraphicsItem *parent, qreal phi, const QString text);
 };
 
 #endif // STARTINGPOINT_H

@@ -14,10 +14,9 @@
 // Height of the equilateral triangle that makes up the marker
 #define HEIGHT (ARROWSIZE * sqrt(3.0) / 2)
 
-Marker::Marker(QGraphicsItem *parent, const QPointF pos, qreal phi, const QString text, const QColor color)
+Marker::Marker(QGraphicsItem *parent, qreal phi, const QString text, const QColor color)
     : QGraphicsItem(parent)
 {
-    this->setPos(pos);
     this->setZValue(ZVALUE_MARKERS);
     this->angle = M_PI / 2 + phi / 180 * M_PI;
     this->text = text;
