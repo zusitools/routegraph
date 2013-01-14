@@ -29,11 +29,11 @@ void Wendepunkt::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
     painter->setPen(QPen(QBrush(Qt::darkMagenta), 1));
 
     // arrow line -- draw a little bit into curve to reduce artifacts on big zoom levels
-    painter->drawLine(-SIZE/2, -0.5, -SIZE/2, -SIZE/2 - 0.1);
+    painter->drawLine(QPointF(-SIZE/2, -0.5), QPointF(-SIZE/2, -SIZE/2 - 0.1));
 
     // arrow tip
-    painter->drawLine(-SIZE/2, 0, -SIZE/2 - SIZE/4, -SIZE/4);
-    painter->drawLine(-SIZE/2, 0, -SIZE/2 + SIZE/4, -SIZE/4);
+    painter->drawLine(QPointF(-SIZE/2, 0), QPointF(-SIZE/2 - SIZE/4, -SIZE/4));
+    painter->drawLine(QPointF(-SIZE/2, 0), QPointF(-SIZE/2 + SIZE/4, -SIZE/4));
 
     // curve
     painter->drawArc(-SIZE/2, -SIZE - 1, SIZE, SIZE, 0, 180 * 16);
