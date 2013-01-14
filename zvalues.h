@@ -1,0 +1,9 @@
+#ifndef ZVALUES_H
+#define ZVALUES_H
+
+#define ZVALUE_WENDEPUNKT 101
+#define ZVALUE_MARKERS 100
+#define ZVALUE_TRACK 0
+#define ZVALUE_ARROWS -1
+
+#endif // ZVALUES_H

@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "signal.h"
+#include "zvalues.h"
 
 // Uncomment this to remove opposite direction elements
 // #define REMOVE_OPPOSITES
@@ -248,8 +249,8 @@ Route::Route(QString fileName)
         QPainterPath path;
         QPainterPath arrowPath;
 
-        pathItem->setZValue(0);
-        pathArrowsItem->setZValue(-1);
+        pathItem->setZValue(ZVALUE_TRACK);
+        pathArrowsItem->setZValue(ZVALUE_ARROWS);
 
         #ifdef RANDOM_COLORS
         QColor penColor = QColor(qrand() % 256, qrand() % 256, qrand() % 256);

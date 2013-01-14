@@ -6,6 +6,7 @@
 #include <cmath>
 
 #include "label.h"
+#include "zvalues.h"
 
 #define ARROWSIZE 8
 #define ARROWANGLE (M_PI / 3)
@@ -17,7 +18,7 @@ Marker::Marker(QGraphicsItem *parent, const QPointF pos, qreal phi, const QStrin
     : QGraphicsItem(parent)
 {
     this->setPos(pos);
-    this->setZValue(std::numeric_limits<double>::infinity());
+    this->setZValue(ZVALUE_MARKERS);
     this->angle = M_PI / 2 + phi / 180 * M_PI;
     this->text = text;
     this->m_color = color;

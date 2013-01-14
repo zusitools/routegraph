@@ -33,7 +33,8 @@ HEADERS  += mainwindow.h \
     marker.h \
     signal.h \
     startingpoint.h \
-    tracksegment.h
+    tracksegment.h \
+    zvalues.h
 
 FORMS    += mainwindow.ui
 
