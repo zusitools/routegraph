@@ -92,6 +92,9 @@
     <ClCompile Include="tracksegment.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="wendepunkt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="label.h">
@@ -125,6 +128,9 @@
       <Filter>Generated Files</Filter>
     </ClInclude>
     <ClInclude Include="tracksegment.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="wendepunkt.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
