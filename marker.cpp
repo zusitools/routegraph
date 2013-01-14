@@ -21,6 +21,7 @@ Marker::Marker(QGraphicsItem *parent, qreal phi, const QString text, const QColo
     this->angle = M_PI / 2 + phi / 180 * M_PI;
     this->text = text;
     this->m_color = color;
+    this->setToolTip(text);
 
     this->m_label = new Label(text, this);
     m_label->setPen(QPen(color));
