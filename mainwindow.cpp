@@ -54,7 +54,16 @@ MainWindow::~MainWindow()
 
 void MainWindow::fileOpenTriggered()
 {
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Open file"), QDir::currentPath(), QString("Streckendateien (*.str *.STR)"));
+    // Read base path from registry
+    QSettings settings("HKEY_CURRENT_USER\\Software\\Zusi", QSettings::NativeFormat);
+    QVariant basePath = settings.value("ZusiDir");
+	QString openDialogPath;
+
+	if (!basePath.isNull()) {
+		openDialogPath = QDir::fromNativeSeparators(basePath.toString()) + "/Strecken";
+	}
+
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Open file"), openDialogPath, QString("Streckendateien (*.str *.STR)"));
 
     if (fileName.isNull()) {
         return;
