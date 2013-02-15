@@ -79,6 +79,10 @@ QHash<uint32_t, Train *> TrainManager::trainsAt(time_t simTime)
             if (i == m_trains[trainAddr]->end()) {
                 // no such value
                 result.insert(trainAddr, m_trains[trainAddr]->values().last()); // TODO
+            } else if (i.key() > simTime) {
+                // Do not display values for later simulation times, only for earlier ones
+                // Because of i.key() > simTime >= keys().first() the expression --i always works.
+                result.insert(trainAddr, (--i).value());
             } else {
                 result.insert(trainAddr, i.value());
             }
