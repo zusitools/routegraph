@@ -9,6 +9,7 @@
 #include <QPointF>
 #include <QPolygonF>
 #include <QGraphicsPolygonItem>
+#include <QTime>
 
 #include <cmath>
 #include <limits>
@@ -173,6 +174,9 @@ QString purgeStationName(QString stationName) {
 
 Route::Route(QString fileName)
 {
+    QTime myTimer;
+    myTimer.start();
+
     QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
         return;
@@ -226,6 +230,9 @@ Route::Route(QString fileName)
     double minY = std::numeric_limits<double>::infinity();
     double maxX = -std::numeric_limits<double>::infinity();
     double maxY = -std::numeric_limits<double>::infinity();
+
+    qDebug() << myTimer.elapsed() << "ms for header";
+    myTimer.restart();
 
     // Read track element
     while (!in.atEnd()) {
@@ -338,6 +345,9 @@ Route::Route(QString fileName)
         m_trackElements.insert(te->number(), te);
     }
 
+    qDebug() << myTimer.elapsed() << "ms for track elements";
+    myTimer.restart();
+
     // Add station names
     foreach (QString stationName, stations.keys()) {
         QPointF center = QPointF(0, 0);
@@ -353,6 +363,9 @@ Route::Route(QString fileName)
         station->name = stationName;
         m_stations.append(station);
     }
+
+    qDebug() << myTimer.elapsed() << "ms for station names";
+    myTimer.restart();
 
     qDebug() << minX << minY << maxX << maxY;
     qDeleteAll(stations.values());
@@ -374,6 +387,9 @@ Route::Route(QString fileName)
         }
     }
 
+    qDebug() << myTimer.elapsed() << "ms for starting points and reachability";
+    myTimer.restart();
+
     #ifdef REMOVE_OPPOSITES
     // Remove opposite direction elements
     int originalCount = trackElements.count();
@@ -393,6 +409,8 @@ Route::Route(QString fileName)
     }
 
     qDebug() << "Removed" << (originalCount - trackElements.count()) << "elements, now" << trackElements.count();
+    qDebug() << myTimer.elapsed() << "ms for removing opposites";
+    myTimer.restart();
     #endif
 
     qDeleteAll(trackElementsByStartX);
@@ -418,6 +436,9 @@ Route::Route(QString fileName)
             }
         }
     }
+
+    qDebug() << myTimer.elapsed() << "ms for Fahrstrasse segments";
+    myTimer.restart();
 
     qDebug() << m_fahrstrasseSegments.count() << "Fahrstrasse segments";
 }
