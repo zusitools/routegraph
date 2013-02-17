@@ -66,6 +66,12 @@ private:
     QString m_lsFile;
 
     /**
+     * Track elements by their (integer) start X coordinate. Is only needed during the constructor
+     * and deleted afterwards.
+     */
+    QHash<int, QList<TrackElement*>*> trackElementsByStartX;
+
+    /**
      * Returns the track element with the specified number, creating a new
      * entry in the track element hash map if necessary.
      * @param number The number of the track element
@@ -82,6 +88,11 @@ private:
      * Sets this track element and all its successors to "reachable from starting point".
      */
     void setReachableRec(TrackElement *const trackElement) const;
+
+    /**
+     * Returns the opposite element of the given track element, if it exists, or NULL otherwise.
+     */
+    TrackElement *findOppositeTrackElement(TrackElement *te) const;
 };
 
 #endif // ROUTE_H

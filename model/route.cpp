@@ -116,27 +116,48 @@ void Route::setReachableRec(TrackElement *const trackElement) const
 {
     TrackElement *te = trackElement;
 
-    if (te->isReachableFromStartingPoint()) {
-        return;
-    }
-
-    te->setIsReachableFromStartingPoint(true);
-
-    // While the track element has only one successo, we do not need to recurse
-    while (te->next.size() == 1) {
-        te = te->next.front();
-
+    // While the track element has only one successor, we do not need to recurse
+    while (true) {
         if (te->isReachableFromStartingPoint()) {
             return;
         }
 
         te->setIsReachableFromStartingPoint(true);
+
+        // Wendepunkt: Opposite direction element is reachable, too
+        if (te->ereignis() == 3036 || te->ereignis() == 3037) {
+            TrackElement *opposite = findOppositeTrackElement(te);
+            if (opposite != NULL) {
+                setReachableRec(opposite);
+            }
+        }
+
+        if (te->next.size() == 1) {
+            te = te->next.front();
+        } else {
+            break;
+        }
     }
 
     // Recurse into all successors (if there are any).
     for (unsigned int i = 0; i < te->next.size(); i++) {
         setReachableRec(te->next.at(i));
     }
+}
+
+TrackElement *Route::findOppositeTrackElement(TrackElement *te) const
+{
+    int oppositeStartX = (int)te->line().p2().x();
+
+    if (trackElementsByStartX.contains(oppositeStartX)) {
+        foreach (TrackElement *possibleOpposite, *trackElementsByStartX[oppositeStartX]) {
+            if (te->isOppositeOf(possibleOpposite)) {
+                return possibleOpposite;
+            }
+        }
+    }
+
+    return NULL;
 }
 
 QString purgeStationName(QString stationName) {
@@ -160,7 +181,6 @@ Route::Route(QString fileName)
     in.setCodec("ISO 8859-1");
 
     #ifdef REMOVE_OPPOSITES
-    QHash<int, QList<TrackElement*>*> trackElementsByStartX;
     QList<TrackElement*> trackElementsPointingLeft;
     #endif
 
@@ -245,7 +265,6 @@ Route::Route(QString fileName)
             m_wendepunkte.append(wendepunkt);
         }
 
-        #ifdef REMOVE_OPPOSITES
         int intStartX = (int)startX;
         if (!trackElementsByStartX.contains(intStartX)) {
             QList<TrackElement*> *newList = new QList<TrackElement*>();
@@ -255,6 +274,7 @@ Route::Route(QString fileName)
             trackElementsByStartX[intStartX]->append(te);
         }
 
+        #ifdef REMOVE_OPPOSITES
         if (te->line().angle() > 90.0 && te->line().angle() <= 270.0) {
             trackElementsPointingLeft.append(te);
         }
@@ -362,23 +382,20 @@ Route::Route(QString fileName)
             continue;
         }
 
-        int oppositeStartX = (int)te->line().p2().x();
-        if (trackElementsByStartX.contains(oppositeStartX)) {
-            foreach (TrackElement *possibleOpposite, *trackElementsByStartX[oppositeStartX]) {
-                if (te->isOppositeOf(possibleOpposite)) {
-                    possibleOpposite->deleteFromNeighbors();
-                    trackElements.remove(possibleOpposite->number());
-                    te->setIsStartingPoint(te->isStartingPoint() || possibleOpposite->isStartingPoint());
-                    te->setBothDirections(true);
-                    break;
-                }
-            }
+        TrackElement *opposite = findOppositeTrackElement(te);
+
+        if (opposite != NULL) {
+            opposite->deleteFromNeighbors();
+            trackElements.remove(opposite->number());
+            te->setIsStartingPoint(te->isStartingPoint() || opposite->isStartingPoint());
+            te->setBothDirections(true);
         }
     }
 
     qDebug() << "Removed" << (originalCount - trackElements.count()) << "elements, now" << trackElements.count();
-    qDeleteAll(trackElementsByStartX);
     #endif
+
+    qDeleteAll(trackElementsByStartX);
 
     // Fahrstrasse segments
     foreach (TrackElement *te, m_trackElements) {
