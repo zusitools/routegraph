@@ -133,6 +133,74 @@ void TrainManager::writeToFile(QDataStream &stream, time_t minSimTime, time_t ma
     stream << (qint64)maxSimTime;
 }
 
+void TrainManager::loadFromFile(QDataStream &stream, bool ignoreExceptions)
+{
+    // Load and compare characteristic numbers/string for route, throw exception
+    // if they do not match.
+    QString lsFile;
+    stream >> lsFile;
+
+    if (lsFile != m_route->lsFile() && !ignoreExceptions) {
+        throw QObject::tr(".ls file of capture (%1) does not match .ls file of currently loaded route (%2)").arg(lsFile, m_route->lsFile());
+    }
+
+    int trackElementCount;
+    stream >> trackElementCount;
+    if (trackElementCount != m_route->trackElements().count() && !ignoreExceptions) {
+        throw QObject::tr("Track element count of capture (%1) does not match track element count of currently loaded route (%2)").arg(trackElementCount, m_route->trackElements().count());
+    }
+
+    // Load static train information
+    stream >> m_staticTrainInfo;
+
+    foreach (StaticTrainInfo *sti, m_staticTrainInfo) {
+        foreach (uint32_t key, sti->occupiedTrackElementNumbers) {
+            sti->occupiedTrackElements.append(m_route->trackElement(key));
+        }
+
+        foreach (uint32_t key, sti->occupiedFahrstrasseSegmentStartNumbers) {
+            sti->occupiedFahrstrasseSegments.append(m_route->trackElement(key)->fahrstrasseSegment());
+        }
+    }
+
+    // Load dynamic train information
+    QHash<quint32, QMap<quint64, Train*> > trains;
+    stream >> trains;
+
+    foreach (quint32 trainAddr, trains.keys()) {
+        QMap<time_t, Train* > *trainInfo = new QMap<time_t, Train*>();
+        m_trains.insert((uint32_t)trainAddr, trainInfo);
+
+        // Replace track element numbers loaded from the capture file with pointers to the TrackElements / FahrstrasseSegments
+        foreach (quint64 simTime, trains.value(trainAddr).keys()) {
+            Train *train = trains.value(trainAddr).value(simTime);
+
+            if (train != NULL)
+            {
+                if (train->occupiedFahrstrasseSegments != NULL) {
+                    train->occupiedFahrstrasseSegments->setMasterQueue(&m_staticTrainInfo.value(trainAddr)->occupiedFahrstrasseSegments);
+                }
+
+                if (train->occupiedTrackElements != NULL) {
+                    train->occupiedTrackElements->setMasterQueue(&m_staticTrainInfo.value(trainAddr)->occupiedTrackElements);
+                }
+            }
+
+            trainInfo->insert((time_t)simTime, train);
+        }
+    }
+
+    // Clear track element numbers from static train info, we do not need them any more
+    foreach (StaticTrainInfo *sti, m_staticTrainInfo) {
+        sti->occupiedTrackElementNumbers.clear();
+        sti->occupiedFahrstrasseSegmentStartNumbers.clear();
+    }
+
+    // Load min/max sim time
+    stream >> (quint64&)m_minSimTime;
+    stream >> (quint64&)m_maxSimTime;
+}
+
 void TrainManager::timerTick()
 {
     try {
@@ -564,74 +632,4 @@ FahrstrasseSegment *TrainManager::getNextSegment(FahrstrasseSegment *currentSegm
         // multiple successors, read the correct one from memory
         return m_route->trackElement(m_memReader->successorElementNumber(currentLastElem->number()))->fahrstrasseSegment();
     }
-}
-
-QDataStream & operator >>(QDataStream &stream, TrainManager &trainManager)
-{
-    // Load and compare characteristic numbers/string for route, throw exception
-    // if they do not match.
-    QString lsFile;
-    stream >> lsFile;
-
-    if (lsFile != trainManager.m_route->lsFile()) {
-        throw QObject::tr(".ls file of capture (%1) does not match .ls file of currently loaded route (%2)").arg(lsFile, trainManager.m_route->lsFile());
-    }
-
-    int trackElementCount;
-    stream >> trackElementCount;
-    if (trackElementCount != trainManager.m_route->trackElements().count()) {
-        throw QObject::tr("Track element count of capture (%1) does not match track element count of currently loaded route (%2)").arg(trackElementCount, trainManager.m_route->trackElements().count());
-    }
-
-    // Load static train information
-    stream >> trainManager.m_staticTrainInfo;
-
-    foreach (StaticTrainInfo *sti, trainManager.m_staticTrainInfo) {
-        foreach (uint32_t key, sti->occupiedTrackElementNumbers) {
-            sti->occupiedTrackElements.append(trainManager.m_route->trackElement(key));
-        }
-
-        foreach (uint32_t key, sti->occupiedFahrstrasseSegmentStartNumbers) {
-            sti->occupiedFahrstrasseSegments.append(trainManager.m_route->trackElement(key)->fahrstrasseSegment());
-        }
-    }
-
-    // Load dynamic train information
-    QHash<quint32, QMap<quint64, Train*> > trains;
-    stream >> trains;
-
-    foreach (quint32 trainAddr, trains.keys()) {
-        QMap<time_t, Train* > *trainInfo = new QMap<time_t, Train*>();
-        trainManager.m_trains.insert((uint32_t)trainAddr, trainInfo);
-
-        // Replace track element numbers loaded from the capture file with pointers to the TrackElements / FahrstrasseSegments
-        foreach (quint64 simTime, trains.value(trainAddr).keys()) {
-            Train *train = trains.value(trainAddr).value(simTime);
-
-            if (train != NULL)
-            {
-                if (train->occupiedFahrstrasseSegments != NULL) {
-                    train->occupiedFahrstrasseSegments->setMasterQueue(&trainManager.m_staticTrainInfo.value(trainAddr)->occupiedFahrstrasseSegments);
-                }
-
-                if (train->occupiedTrackElements != NULL) {
-                    train->occupiedTrackElements->setMasterQueue(&trainManager.m_staticTrainInfo.value(trainAddr)->occupiedTrackElements);
-                }
-            }
-
-            trainInfo->insert((time_t)simTime, train);
-        }
-    }
-
-    // Clear track element numbers from static train info, we do not need them any more
-    foreach (StaticTrainInfo *sti, trainManager.m_staticTrainInfo) {
-        sti->occupiedTrackElementNumbers.clear();
-        sti->occupiedFahrstrasseSegmentStartNumbers.clear();
-    }
-
-    // Load min/max sim time
-    stream >> (quint64&)trainManager.m_minSimTime;
-    stream >> (quint64&)trainManager.m_maxSimTime;
-
-    return stream;
 }

@@ -187,11 +187,15 @@ void MainWindow::openCaptureTriggered()
     TrainManager *tm = new TrainManager(m_route);
 
     try {
-        in >> *tm;
+        tm->loadFromFile(in);
     } catch (QString &error) {
-        // TODO handle errors in a better way, optionally ignore them
-        QMessageBox::critical(this, tr("Error"), error);
-        return;
+        if (QMessageBox::critical(this, tr("Error"), error, QMessageBox::Abort, QMessageBox::Ignore) == QMessageBox::Ignore) {
+            file.reset();
+            in.skipRawData(2 * sizeof(qint32)); // skip magic and version again
+            tm->loadFromFile(in, true);
+        } else {
+            return;
+        }
     }
 
     // Display the trains instead of the currently loaded trains.
