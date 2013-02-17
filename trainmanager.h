@@ -59,7 +59,7 @@ public:
     /**
      * Loads information about a capture from a QDataStream
      */
-    friend QDataStream &operator>> (QDataStream& stream, TrainManager& trainManager);
+    void loadFromFile(QDataStream& stream, bool ignoreExceptions = false);
 
 signals:
     /**
