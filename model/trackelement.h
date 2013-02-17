@@ -69,6 +69,11 @@ public:
      */
     inline unsigned int registerNo() { return m_registerNo; }
 
+    /**
+     * Returns whether this track element is reachable from any starting point of the route.
+     */
+    inline bool isReachableFromStartingPoint() const { return m_isReachableFromStartingPoint; }
+
     void setLine(const QLineF line) { m_line = line; }
     void setElectrified(const bool electrified) { m_electrified = electrified; }
     void setTunnel(const bool tunnel) { m_tunnel = tunnel; }
@@ -81,6 +86,7 @@ public:
     inline void setRegisterNo(const unsigned int registerNo) { m_registerNo = registerNo; }
     inline void setStationName(const QString stationName) { m_stationName = stationName; }
     inline void setTrackName(const QString trackName) { m_trackName = trackName; }
+    inline void setIsReachableFromStartingPoint(const bool isReachable) { m_isReachableFromStartingPoint = isReachable; }
 
 private:
     QLineF m_line;
@@ -94,6 +100,7 @@ private:
     unsigned short m_ereignis;
     FahrstrasseSegment *m_fahrstrasseSegment;
     unsigned int m_registerNo;
+    bool m_isReachableFromStartingPoint;
 
     QString m_stationName;
     QString m_trackName;

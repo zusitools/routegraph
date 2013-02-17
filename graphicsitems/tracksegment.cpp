@@ -69,3 +69,9 @@ TrackSegment::TrackSegment(QList<TrackElement*> trackElements, bool showArrows, 
         m_arrows->setPath(arrowPath);
     }
 }
+
+void TrackSegment::setVisible(bool visible)
+{
+    m_arrows->setVisible(visible);
+    MinWidthPathItem::setVisible(visible);
+}

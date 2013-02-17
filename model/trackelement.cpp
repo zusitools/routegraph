@@ -5,6 +5,7 @@
 #include <cmath>
 
 TrackElement::TrackElement(const int number)
+    : m_isReachableFromStartingPoint(false)
 {
     this->m_number = number;
     this->m_bothDirections = false;
@@ -42,7 +43,8 @@ bool TrackElement::isStartingPointOfSegment()
     //  - it differs from its predecessors in a property (electrified, bothDirections, tunnel)
     // If there are multiple predecessors, the first predecessor is taken.
     TrackElement *pred = prev.front();
-    return (pred->next.front() != this) || (pred->electrified() ^ this->m_electrified) || (pred->bothDirections() ^ this->m_bothDirections) || (pred->tunnel() ^ this->m_tunnel)  || (pred->isStartingSegment() ^ this->m_isStartingSegment);
+    return (pred->next.front() != this) || (pred->electrified() ^ this->m_electrified) || (pred->bothDirections() ^ this->m_bothDirections) || (pred->tunnel() ^ this->m_tunnel)  || (pred->isStartingSegment() ^ this->m_isStartingSegment)
+            || (pred->isReachableFromStartingPoint() ^ this->m_isReachableFromStartingPoint);
 }
 
 bool TrackElement::isStartingPointOfFahrstrasseSegment()

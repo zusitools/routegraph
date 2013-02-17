@@ -112,6 +112,33 @@ void Route::findRouteRec(QList<QList<FahrstrasseSegment*> *> &results, QList<Fah
     }
 }
 
+void Route::setReachableRec(TrackElement *const trackElement) const
+{
+    TrackElement *te = trackElement;
+
+    if (te->isReachableFromStartingPoint()) {
+        return;
+    }
+
+    te->setIsReachableFromStartingPoint(true);
+
+    // While the track element has only one successo, we do not need to recurse
+    while (te->next.size() == 1) {
+        te = te->next.front();
+
+        if (te->isReachableFromStartingPoint()) {
+            return;
+        }
+
+        te->setIsReachableFromStartingPoint(true);
+    }
+
+    // Recurse into all successors (if there are any).
+    for (unsigned int i = 0; i < te->next.size(); i++) {
+        setReachableRec(te->next.at(i));
+    }
+}
+
 QString purgeStationName(QString stationName) {
     QString result = stationName;
     int threeDotsIndex = stationName.indexOf("...");
@@ -312,12 +339,14 @@ Route::Route(QString fileName)
 
     file.close();
 
-    // Mark starting points
+    // Mark starting points and set "reachable from starting point" value
     foreach (TrackElement *te, startingPoints.keys()) {
         te->setIsStartingSegment(true);
         StartingPoint *startingPoint = new StartingPoint(NULL, te->line().angle(), startingPoints[te]);
         startingPoint->setPos(te->line().p1());
         m_startingPoints.append(startingPoint);
+
+        setReachableRec(te);
 
         while (!te->hasSignal() && te->next.size() > 0) {
             te = te->next.front();

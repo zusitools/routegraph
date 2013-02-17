@@ -229,12 +229,21 @@ void TrackView::setTextScaling(bool on)
     }
 }
 
+void TrackView::setUnreachableTrackSegmentsVisible(bool on)
+{
+    foreach (TrackSegment *ts, m_unreachableTrackSegments) {
+        ts->setVisible(on);
+    }
+}
+
 void TrackView::createTrackSegments() {
     foreach (TrackElement *te, m_route->trackElements()) {
         if (!te->isStartingPointOfSegment()) { continue; }
 
         QList<TrackElement*> elements; // The elements out of which to form the track segment
         elements.append(te);
+
+        bool reachable = te->isReachableFromStartingPoint();
 
         while (te->next.size() > 0 && te->next.front()->prev.front() == te && !te->next.front()->isStartingPointOfSegment()) {
             te = te->next.front();
@@ -243,6 +252,9 @@ void TrackView::createTrackSegments() {
 
         TrackSegment *trackSegment = new TrackSegment(elements, !te->tunnel()); // do not show arrows in tunnels, it looks ugly
         m_trackSegments.append(trackSegment);
+        if (!reachable) {
+            m_unreachableTrackSegments.append(trackSegment);
+        }
 
 #ifdef RANDOM_COLORS
         QColor penColor = QColor(qrand() % 256, qrand() % 256, qrand() % 256);

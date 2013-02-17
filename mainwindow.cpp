@@ -46,6 +46,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->actionShowStartingPointNames->setChecked(settings.value("view/showStartingPointNames", false).toBool());
     ui->actionShowViewPointNames->setChecked(settings.value("view/showViewPointNames", false).toBool());
     ui->actionShowStationNames->setChecked(settings.value("view/showStationNames", ui->actionShowStationNames->isChecked()).toBool());
+    ui->actionShowUnreachableTrackElements->setChecked(settings.value("view/showUnreachableTrackElements", ui->actionShowUnreachableTrackElements->isChecked()).toBool());
     ui->actionTextScaling->setChecked(settings.value("view/textScaling", false).toBool());
 
     ui->actionShowTrains->setChecked(settings.value("trains/showTrains", ui->actionShowTrains->isChecked()).toBool());
@@ -73,6 +74,7 @@ MainWindow::~MainWindow()
     settings.setValue("view/showStartingPointNames", ui->actionShowStartingPointNames->isChecked());
     settings.setValue("view/showViewPointNames", ui->actionShowViewPointNames->isChecked());
     settings.setValue("view/showStationNames", ui->actionShowStationNames->isChecked());
+    settings.setValue("view/showUnreachableTrackElements", ui->actionShowUnreachableTrackElements->isChecked());
     settings.setValue("view/textScaling", ui->actionTextScaling->isChecked());
     settings.setValue("trains/showTrains", ui->actionShowTrains->isChecked());
     settings.setValue("trains/showTrainName", ui->actionShowTrainName->isChecked());
@@ -142,6 +144,7 @@ void MainWindow::fileOpenTriggered()
     showStartingPointNamesTriggered(ui->actionShowStartingPointNames->isChecked());
     showSignalNamesTriggered(ui->actionShowSignalNames->isChecked());
     showStationNamesTriggered(ui->actionShowStationNames->isChecked());
+    showUnreachableTrackElementsTriggered(ui->actionShowUnreachableTrackElements->isChecked());
 
     textScaleTriggered(ui->actionTextScaling->isChecked());
     antiAliasingTriggered(ui->actionAntiAliasing->isChecked());
@@ -268,6 +271,11 @@ void MainWindow::showSignalNamesTriggered(bool on)
 void MainWindow::showStationNamesTriggered(bool on)
 {
     ui->trackView->setStationNamesVisible(on);
+}
+
+void MainWindow::showUnreachableTrackElementsTriggered(bool on)
+{
+    ui->trackView->setUnreachableTrackSegmentsVisible(on);
 }
 
 void MainWindow::antiAliasingTriggered(bool on)

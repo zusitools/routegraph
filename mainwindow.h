@@ -31,6 +31,7 @@ public slots:
     void showStartingPointNamesTriggered(bool on);
     void showSignalNamesTriggered(bool on);
     void showStationNamesTriggered(bool on);
+    void showUnreachableTrackElementsTriggered(bool on);
     void antiAliasingTriggered(bool on);
     void zoomInTriggered();
     void zoomOutTriggered();

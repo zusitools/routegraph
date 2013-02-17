@@ -77,6 +77,11 @@ private:
      * Recursively finds a route to the given timetable entry.
      */
     void findRouteRec(QList<QList<FahrstrasseSegment *> *> &results, QList<FahrstrasseSegment *> &currentPath, int recursionDepth, TimetableEntry &target);
+
+    /**
+     * Sets this track element and all its successors to "reachable from starting point".
+     */
+    void setReachableRec(TrackElement *const trackElement) const;
 };
 
 #endif // ROUTE_H

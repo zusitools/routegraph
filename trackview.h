@@ -57,6 +57,11 @@ public:
     void setTextScaling(bool on);
 
     /**
+     * Sets whether unreachable track segments should be visible.
+     */
+    void setUnreachableTrackSegmentsVisible(bool on);
+
+    /**
      * Returns the Fahrstrasse segment items of this track view.
      */
     inline QList<FahrstrasseSegmentItem*> *fahrstrasseSegmentItems() { return &m_fahrstrasseSegmentItems; }
@@ -79,6 +84,7 @@ private:
     Route *m_route;
     QList<SignalMarker*> m_signals;
     QList<TrackSegment*> m_trackSegments;
+    QList<TrackSegment*> m_unreachableTrackSegments;
     QList<FahrstrasseSegmentItem*> m_fahrstrasseSegmentItems;
     QList<Label*> m_stationLabels;
     QList<FahrstrasseAufloesenMarker*> m_fahrstrasseAufloesenMarkers;
