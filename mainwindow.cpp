@@ -54,6 +54,14 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->actionShowTargetSignal->setChecked(settings.value("trains/showTargetSignal", ui->actionShowTargetSignal->isChecked()).toBool());
 
     this->resize(settings.value("mainwindow/size", this->size()).toSize());
+
+    // Hide items that do nothing
+    ui->actionReconnectToZusi->setVisible(false);
+
+    // Sim time label, slider and menu are only visible after loading a capture
+    ui->simTimeSlider->setVisible(false);
+    ui->simTimeLabel->setVisible(false);
+    ui->menu_Trains->menuAction()->setVisible(false);
 }
 
 MainWindow::~MainWindow()
@@ -190,6 +198,11 @@ void MainWindow::openCaptureTriggered()
     resetTrainManager(true);
     this->m_trainManager = tm;
     ui->actionSaveCapture->setEnabled(true);
+
+    // Display UI for handling captures
+    ui->simTimeSlider->setVisible(true);
+    ui->simTimeLabel->setVisible(true);
+    ui->menu_Trains->menuAction()->setVisible(true);
 
     ui->simTimeSlider->setMinimum(m_trainManager->minSimTime());
     ui->simTimeSlider->setMaximum(m_trainManager->maxSimTime());
