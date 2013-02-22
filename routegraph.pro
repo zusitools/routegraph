@@ -14,32 +14,70 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    route.cpp \
-    trackelement.cpp \
     trackview.cpp \
-    viewpoint.cpp \
-    label.cpp \
-    marker.cpp \
-    signal.cpp \
-    startingpoint.cpp \
-    tracksegment.cpp \
-    wendepunkt.cpp
+    memread/zusimemoryreader.cpp \
+    memread/zusimemoryreaderlinux.cpp \
+    memread/zusimemoryreaderexception.cpp \
+    trainmanager.cpp \
+    graphicsitems/fahrstrassesegmentitem.cpp \
+    model/fahrstrassesegment.cpp \
+    model/register.cpp \
+    graphicsitems/minwidthpathitem.cpp \
+    model/train.cpp \
+    graphicsitems/marker.cpp \
+    graphicsitems/signalmarker.cpp \
+    graphicsitems/startingpoint.cpp \
+    model/trackelement.cpp \
+    graphicsitems/tracksegment.cpp \
+    graphicsitems/wendepunkt.cpp \
+    graphicsitems/viewpoint.cpp \
+    graphicsitems/label.cpp \
+    model/route.cpp \
+    graphicsitems/trainitem.cpp \
+    graphicsitems/fahrstrasseaufloesenmarker.cpp \
+    model/statictraininfo.cpp \
+    libqxt/qxtspanslider.cpp \
+    libqxt/qxtglobal.cpp \
+    savecapturedialog.cpp \
+    utils.cpp
 
 HEADERS  += mainwindow.h \
-    route.h \
-    trackelement.h \
     trackview.h \
-    viewpoint.h \
-    label.h \
-    marker.h \
-    signal.h \
-    startingpoint.h \
-    tracksegment.h \
-    wendepunkt.h \
-    zvalues.h
+    zvalues.h \
+    memread/zusimemoryreader.h \
+    memread/zusimemoryreaderlinux.h \
+    memread/zusimemoryreaderexception.h \
+    trainmanager.h \
+    graphicsitems/fahrstrassesegmentitem.h \
+    model/fahrstrassesegment.h \
+    model/register.h \
+    model/statictraininfo.h \
+    graphicsitems/minwidthpathitem.h \
+    model/station.h \
+    shareddeque.h \
+    model/timetableentry.h \
+    graphicsitems/label.h \
+    graphicsitems/marker.h \
+    graphicsitems/signalmarker.h \
+    graphicsitems/wendepunkt.h \
+    graphicsitems/viewpoint.h \
+    graphicsitems/trainitem.h \
+    model/train.h \
+    model/trackelement.h \
+    graphicsitems/tracksegment.h \
+    graphicsitems/startingpoint.h \
+    graphicsitems/fahrstrasseaufloesenmarker.h \
+    model/route.h \
+    libqxt/qxtspanslider_p.h \
+    libqxt/qxtspanslider.h \
+    libqxt/qxtglobal.h \
+    savecapturedialog.h \
+    utils.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    savecapturedialog.ui
 
 TRANSLATIONS = routegraph_de.ts
 
+# -Weffc++ for checking for uninitialized data members
 QMAKE_CXXFLAGS = -std=c++11

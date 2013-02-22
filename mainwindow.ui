@@ -6,18 +6,49 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>845</width>
-    <height>495</height>
+    <width>833</width>
+    <height>483</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Zusi Route Graph</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QHBoxLayout" name="horizontalLayout">
+   <layout class="QVBoxLayout" name="verticalLayout_2">
     <property name="margin">
      <number>0</number>
     </property>
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="TrackView" name="trackView"/>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="QSlider" name="simTimeSlider">
+          <property name="maximum">
+           <number>0</number>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="simTimeLabel">
+          <property name="locale">
+           <locale language="English" country="UnitedStates"/>
+          </property>
+          <property name="text">
+           <string>(Simulation time)</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menuBar">
@@ -25,7 +56,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>845</width>
+     <width>833</width>
      <height>19</height>
     </rect>
    </property>
@@ -34,6 +65,9 @@
      <string>&amp;File</string>
     </property>
     <addaction name="actionOpen"/>
+    <addaction name="separator"/>
+    <addaction name="actionOpenCapture"/>
+    <addaction name="actionSaveCapture"/>
    </widget>
    <widget class="QMenu" name="menu_View">
     <property name="title">
@@ -46,16 +80,29 @@
     <addaction name="actionShowSignalNames"/>
     <addaction name="actionShowViewPointNames"/>
     <addaction name="actionShowStartingPointNames"/>
+    <addaction name="actionShowStationNames"/>
     <addaction name="separator"/>
     <addaction name="actionTextScaling"/>
     <addaction name="actionAntiAliasing"/>
    </widget>
+   <widget class="QMenu" name="menu_Trains">
+    <property name="title">
+     <string>&amp;Trains</string>
+    </property>
+    <addaction name="actionReconnectToZusi"/>
+    <addaction name="separator"/>
+    <addaction name="actionShowTrains"/>
+    <addaction name="actionShowTrainName"/>
+    <addaction name="actionShowCurrentSpeed"/>
+    <addaction name="actionShowTargetSignal"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menu_View"/>
+   <addaction name="menu_Trains"/>
   </widget>
   <action name="actionOpen">
    <property name="text">
-    <string>&amp;Open</string>
+    <string>&amp;Open route</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
@@ -149,8 +196,106 @@
     <string>1</string>
    </property>
   </action>
+  <action name="actionReconnectToZusi">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Reconnect to Zusi</string>
+   </property>
+  </action>
+  <action name="actionShowTrains">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Show trains</string>
+   </property>
+   <property name="shortcut">
+    <string>Z</string>
+   </property>
+  </action>
+  <action name="actionShowTrainName">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show train &amp;names</string>
+   </property>
+  </action>
+  <action name="actionShowCurrentSpeed">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Show &amp;current speed</string>
+   </property>
+  </action>
+  <action name="actionShowTargetSignal">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show &amp;target signal</string>
+   </property>
+  </action>
+  <action name="actionShowStationNames">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Stati&amp;on names</string>
+   </property>
+   <property name="shortcut">
+    <string>H</string>
+   </property>
+  </action>
+  <action name="actionOpenCapture">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Open &amp;capture</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+O</string>
+   </property>
+  </action>
+  <action name="actionSaveCapture">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Save capture</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>TrackView</class>
+   <extends>QGraphicsView</extends>
+   <header>trackview.h</header>
+   <slots>
+    <signal>mouseDoubleClicked(QMouseEvent*)</signal>
+   </slots>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections>
   <connection>
@@ -297,6 +442,166 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>simTimeSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>simTimeSliderValueChanged(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>379</x>
+     <y>480</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>421</x>
+     <y>246</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionReconnectToZusi</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>reconnectToZusiTriggered()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>420</x>
+     <y>245</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionShowTrains</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>showTrainsTriggered(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>420</x>
+     <y>245</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionShowTrainName</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>showTrainNameTriggered(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>420</x>
+     <y>245</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionShowCurrentSpeed</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>showCurrentSpeedTriggered(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>420</x>
+     <y>245</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionShowTargetSignal</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>showTargetSignalTriggered(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>420</x>
+     <y>245</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionShowStationNames</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>showStationNamesTriggered(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>419</x>
+     <y>244</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>trackView</sender>
+   <signal>mouseDoubleClicked(QMouseEvent*)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>trackViewDoubleClicked(QMouseEvent*)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>418</x>
+     <y>238</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>418</x>
+     <y>243</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionOpenCapture</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>openCaptureTriggered()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>417</x>
+     <y>242</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionSaveCapture</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>saveCaptureTriggered()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>417</x>
+     <y>242</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>fileOpenTriggered()</slot>
@@ -308,5 +613,15 @@
   <slot>zoomInTriggered()</slot>
   <slot>zoomOutTriggered()</slot>
   <slot>zoomFitTriggered()</slot>
+  <slot>simTimeSliderValueChanged(int)</slot>
+  <slot>reconnectToZusiTriggered()</slot>
+  <slot>showTrainsTriggered(bool)</slot>
+  <slot>showTrainNameTriggered(bool)</slot>
+  <slot>showCurrentSpeedTriggered(bool)</slot>
+  <slot>showTargetSignalTriggered(bool)</slot>
+  <slot>showStationNamesTriggered(bool)</slot>
+  <slot>trackViewDoubleClicked(QMouseEvent*)</slot>
+  <slot>openCaptureTriggered()</slot>
+  <slot>saveCaptureTriggered()</slot>
  </slots>
 </ui>

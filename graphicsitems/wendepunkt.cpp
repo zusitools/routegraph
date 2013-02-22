@@ -1,4 +1,4 @@
-#include "wendepunkt.h"
+#include "graphicsitems/wendepunkt.h"
 
 #include <QPainter>
 #include <QPen>

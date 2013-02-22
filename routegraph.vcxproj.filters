@@ -45,36 +45,33 @@
       <Extensions>cpp;moc</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
+    <Filter Include="Source Files\memread">
+      <UniqueIdentifier>{73820e3f-a53c-4290-a98e-d1851185bb35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\memread">
+      <UniqueIdentifier>{baf4284e-1eed-4700-9996-c49a6927f5a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\graphicsitems">
+      <UniqueIdentifier>{b935cc29-3ff3-480c-bd36-4f1044907eaa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\model">
+      <UniqueIdentifier>{a9496a97-17d5-4948-b97e-02dee7645cea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\graphicsitems">
+      <UniqueIdentifier>{b2750c68-0d0d-430b-84ce-75fb77a0891f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\model">
+      <UniqueIdentifier>{92ae687a-d2e5-44c5-a15b-32579a3e54a5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="label.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="mainwindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="marker.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="route.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="signal.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="startingpoint.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="trackelement.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="trackview.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="viewpoint.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Debug\moc_mainwindow.cpp">
@@ -89,54 +86,182 @@
     <ClCompile Include="Release\moc_trackview.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
-    <ClCompile Include="tracksegment.cpp">
+    <ClCompile Include="memread\zusimemoryreader.cpp">
+      <Filter>Source Files\memread</Filter>
+    </ClCompile>
+    <ClCompile Include="memread\zusimemoryreaderwindows.cpp">
+      <Filter>Source Files\memread</Filter>
+    </ClCompile>
+    <ClCompile Include="memread\zusimemoryreaderexception.cpp">
+      <Filter>Source Files\memread</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_fahrstrassesegmentitem.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Release\moc_fahrstrassesegmentitem.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="graphicsitems\fahrstrassesegmentitem.cpp">
+      <Filter>Source Files\graphicsitems</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_fahrstrassesegment.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Release\moc_fahrstrassesegment.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="model\fahrstrassesegment.cpp">
+      <Filter>Source Files\model</Filter>
+    </ClCompile>
+    <ClCompile Include="trainmanager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="wendepunkt.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Debug\moc_trainmanager.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Release\moc_trainmanager.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="graphicsitems\minwidthpathitem.cpp">
+      <Filter>Source Files\graphicsitems</Filter>
+    </ClCompile>
+    <ClCompile Include="model\train.cpp">
+      <Filter>Source Files\model</Filter>
+    </ClCompile>
+    <ClCompile Include="graphicsitems\fahrstrasseaufloesenmarker.cpp">
+      <Filter>Source Files\graphicsitems</Filter>
+    </ClCompile>
+    <ClCompile Include="graphicsitems\label.cpp">
+      <Filter>Source Files\graphicsitems</Filter>
+    </ClCompile>
+    <ClCompile Include="graphicsitems\marker.cpp">
+      <Filter>Source Files\graphicsitems</Filter>
+    </ClCompile>
+    <ClCompile Include="graphicsitems\signalmarker.cpp">
+      <Filter>Source Files\graphicsitems</Filter>
+    </ClCompile>
+    <ClCompile Include="graphicsitems\startingpoint.cpp">
+      <Filter>Source Files\graphicsitems</Filter>
+    </ClCompile>
+    <ClCompile Include="graphicsitems\tracksegment.cpp">
+      <Filter>Source Files\graphicsitems</Filter>
+    </ClCompile>
+    <ClCompile Include="graphicsitems\trainitem.cpp">
+      <Filter>Source Files\graphicsitems</Filter>
+    </ClCompile>
+    <ClCompile Include="graphicsitems\viewpoint.cpp">
+      <Filter>Source Files\graphicsitems</Filter>
+    </ClCompile>
+    <ClCompile Include="graphicsitems\wendepunkt.cpp">
+      <Filter>Source Files\graphicsitems</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_register.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Release\moc_register.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="model\register.cpp">
+      <Filter>Source Files\model</Filter>
+    </ClCompile>
+    <ClCompile Include="model\route.cpp">
+      <Filter>Source Files\model</Filter>
+    </ClCompile>
+    <ClCompile Include="model\trackelement.cpp">
+      <Filter>Source Files\model</Filter>
+    </ClCompile>
+    <ClCompile Include="model\statictraininfo.cpp">
+      <Filter>Source Files\model</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="label.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <CustomBuild Include="mainwindow.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
-    <ClInclude Include="marker.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="route.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="signal.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="startingpoint.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="trackelement.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <CustomBuild Include="trackview.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
-    <ClInclude Include="viewpoint.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GeneratedFiles\ui_mainwindow.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
-    <ClInclude Include="tracksegment.h">
+    <ClInclude Include="memread\zusimemoryreader.h">
+      <Filter>Header Files\memread</Filter>
+    </ClInclude>
+    <ClInclude Include="memread\zusimemoryreaderwindows.h">
+      <Filter>Header Files\memread</Filter>
+    </ClInclude>
+    <ClInclude Include="memread\zusimemoryreaderexception.h">
+      <Filter>Header Files\memread</Filter>
+    </ClInclude>
+    <ClInclude Include="model\statictraininfo.h">
+      <Filter>Header Files\model</Filter>
+    </ClInclude>
+    <ClInclude Include="graphicsitems\minwidthpathitem.h">
+      <Filter>Header Files\graphicsitems</Filter>
+    </ClInclude>
+    <ClInclude Include="model\station.h">
+      <Filter>Header Files\model</Filter>
+    </ClInclude>
+    <ClInclude Include="model\timetableentry.h">
+      <Filter>Header Files\model</Filter>
+    </ClInclude>
+    <ClInclude Include="windowserrorhelper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="wendepunkt.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="graphicsitems\fahrstrasseaufloesenmarker.h">
+      <Filter>Header Files\graphicsitems</Filter>
     </ClInclude>
+    <CustomBuild Include="model\register.h">
+      <Filter>Header Files\model</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="mainwindow.ui">
       <Filter>Form Files</Filter>
     </CustomBuild>
+    <CustomBuild Include="graphicsitems\fahrstrassesegmentitem.h">
+      <Filter>Header Files\graphicsitems</Filter>
+    </CustomBuild>
+    <CustomBuild Include="model\fahrstrassesegment.h">
+      <Filter>Header Files\model</Filter>
+    </CustomBuild>
+    <CustomBuild Include="trainmanager.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="graphicsitems\label.h">
+      <Filter>Header Files\graphicsitems</Filter>
+    </ClInclude>
+    <ClInclude Include="graphicsitems\marker.h">
+      <Filter>Header Files\graphicsitems</Filter>
+    </ClInclude>
+    <ClInclude Include="graphicsitems\signalmarker.h">
+      <Filter>Header Files\graphicsitems</Filter>
+    </ClInclude>
+    <ClInclude Include="graphicsitems\startingpoint.h">
+      <Filter>Header Files\graphicsitems</Filter>
+    </ClInclude>
+    <ClInclude Include="graphicsitems\tracksegment.h">
+      <Filter>Header Files\graphicsitems</Filter>
+    </ClInclude>
+    <ClInclude Include="graphicsitems\trainitem.h">
+      <Filter>Header Files\graphicsitems</Filter>
+    </ClInclude>
+    <ClInclude Include="graphicsitems\viewpoint.h">
+      <Filter>Header Files\graphicsitems</Filter>
+    </ClInclude>
+    <ClInclude Include="graphicsitems\wendepunkt.h">
+      <Filter>Header Files\graphicsitems</Filter>
+    </ClInclude>
+    <ClInclude Include="model\trackelement.h">
+      <Filter>Header Files\model</Filter>
+    </ClInclude>
+    <ClInclude Include="model\train.h">
+      <Filter>Header Files\model</Filter>
+    </ClInclude>
+    <ClInclude Include="model\route.h">
+      <Filter>Header Files\model</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

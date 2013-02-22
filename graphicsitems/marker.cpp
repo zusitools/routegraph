@@ -5,7 +5,7 @@
 #include <limits>
 #include <cmath>
 
-#include "label.h"
+#include "graphicsitems/label.h"
 #include "zvalues.h"
 
 #define ARROWSIZE 8
@@ -65,5 +65,5 @@ void Marker::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
     painter->setPen(Qt::NoPen);
     painter->setBrush(m_color);
 
-    painter->drawPolygon(points, 3);
+    painter->drawConvexPolygon(points, 3);
 }

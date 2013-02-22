@@ -1,4 +1,4 @@
-#include "route.h"
+#include "model/route.h"
 
 #include <QFile>
 #include <QTextStream>
@@ -19,19 +19,18 @@
 // Uncomment this to remove opposite direction elements
 // #define REMOVE_OPPOSITES
 
-// Uncomment this to give each segment a random color
-// #define RANDOM_COLORS
-
-#define ARROWEVERY 100
-#define ARROWLENGTH 10.0
-#define ARROWANGLE asin(0.95 / ARROWLENGTH)
-
+/**
+ * Skips the specified number of lines in the QTextStream ts.
+ */
 void skipLine(QTextStream &ts, int count = 1) {
     for (int i = 0; i < count && !ts.atEnd(); i++) {
         ts.readLine();
     }
 }
 
+/**
+ * Skips lines in the QTextStream ts until the string "terminator" appeared as a whole line the specified number of times.
+ */
 void skipUntil(QTextStream &ts, QString terminator = "#", int count = 1) {
     while (!ts.atEnd() && count > 0) {
         QString line = ts.readLine();
@@ -43,14 +42,85 @@ void skipUntil(QTextStream &ts, QString terminator = "#", int count = 1) {
 }
 
 TrackElement* Route::getTrackElement(int number) {
-    TrackElement* result = trackElements[number];
+    TrackElement* result = m_trackElements[number];
 
     if (result == NULL) {
         result = new TrackElement(number);
-        trackElements.insert(number, result);
+        m_trackElements.insert(number, result);
     }
 
     return result;
+}
+
+QList<TrackElement *> Route::trackElementsWithSignals()
+{
+    QList<TrackElement*> trackElementsWithSignals;
+    foreach (TrackElement *te, m_trackElements.values()) {
+        if (te->hasSignal()) {
+            trackElementsWithSignals.append(te);
+        }
+    }
+    return trackElementsWithSignals;
+}
+
+TrackElement *Route::trackElement(const int number)
+{
+    if (m_trackElements.contains(number)) {
+        return m_trackElements.value(number);
+    }
+
+    return NULL;
+}
+
+QList<QList<FahrstrasseSegment *> *> Route::findRoutesTo(uint32_t startElementNumber, TimetableEntry *target, int recursionDepth)
+{
+    QList<QList<FahrstrasseSegment *> *> result;
+    QList<FahrstrasseSegment*> currentPath;
+    currentPath.append(trackElement(startElementNumber)->fahrstrasseSegment());
+
+    findRouteRec(result, currentPath, recursionDepth, *target);
+
+    return result;
+}
+
+void Route::findRouteRec(QList<QList<FahrstrasseSegment*> *> &results, QList<FahrstrasseSegment*> &currentPath, int recursionDepth, TimetableEntry &target)
+{
+    TrackElement *last = currentPath.last()->lastElement();
+    if (last->hasSignal()) {
+        if (last->stationName() == target.stationName && target.allowedTracks.contains(last->trackName())) {
+            // We found a path!
+            QList<FahrstrasseSegment*> *newPath = new QList<FahrstrasseSegment*>(currentPath);
+            results.append(newPath);
+            return;
+        } else {
+            // We found a signal, but it does not match.
+            if (--recursionDepth < 0) {
+                return;
+            }
+        }
+    }
+
+    if (last->next.size() == 0) {
+        return;
+    } else {
+        // Current element has more than one successor, split the search.
+        for (unsigned int i = 0; i < last->next.size(); i++) {
+            currentPath.push_back(last->next.at(i)->fahrstrasseSegment());
+            findRouteRec(results, currentPath, recursionDepth, target);
+            currentPath.pop_back();
+        }
+    }
+}
+
+QString purgeStationName(QString stationName) {
+    QString result = stationName;
+    int threeDotsIndex = stationName.indexOf("...");
+
+    if (threeDotsIndex != -1) {
+        result.truncate(threeDotsIndex);
+    }
+
+    return stationName.replace('|', ' ').trimmed();
 }
 
 Route::Route(QString fileName)
@@ -64,22 +134,29 @@ Route::Route(QString fileName)
 
     #ifdef REMOVE_OPPOSITES
     QHash<int, QList<TrackElement*>*> trackElementsByStartX;
-    #endif
     QList<TrackElement*> trackElementsPointingLeft;
+    #endif
+
     QHash<TrackElement*, QString> startingPoints;
+    QHash<QString, QList<QPointF>*> stations; // position of station labels by station name
 
     QString version = in.readLine();
-    if (version != "2.2" && version != "2.3" && version != "2.4") {
-        throw QString(QObject::tr("Unsupported file format version: %1").arg(version));
+    if (version.length() != 3) {
+        throw QObject::tr("Unsupported file format");
+    } else if (version != "2.2" && version != "2.3") {
+        throw QObject::tr("Unsupported file format version: %1").arg(version);
     }
 
     // Skip header of file
     skipUntil(in, "#", 2);
-    skipLine(in, 2);
+    skipLine(in);
+
+    m_lsFile = in.readLine();
 
     // Read starting points
     while (in.readLine() != "#") {
         int number = in.readLine().toInt();
+        getTrackElement(number)->setIsStartingPoint(true);
         startingPoints.insert(getTrackElement(number), in.readLine());
     }
 
@@ -109,7 +186,7 @@ Route::Route(QString fileName)
         TrackElement *te = getTrackElement(elementNumber);
         skipLine(in, 3);
 
-        int ereignis = in.readLine().toInt();
+        te->setEreignis(in.readLine().toShort());
 
         double startY = -in.readLine().replace(',', '.').toDouble();
         double startX = -in.readLine().replace(',', '.').toDouble();
@@ -134,7 +211,7 @@ Route::Route(QString fileName)
         te->setLine(QLineF(startX, startY, endX, endY));
 
         // Read Ereignisse only after setting the track element coordinates
-        if (ereignis == 3036 || ereignis == 3037) {
+        if (te->ereignis() == 3036 || te->ereignis() == 3037) {
             // Wendepunkt / Wendepunkt auf anderen Blocknamen
             Wendepunkt *wendepunkt = new Wendepunkt(0, te->line().angle());
             wendepunkt->setPos(te->line().p2());
@@ -150,11 +227,11 @@ Route::Route(QString fileName)
         } else {
             trackElementsByStartX[intStartX]->append(te);
         }
-        #endif
 
         if (te->line().angle() > 90.0 && te->line().angle() <= 270.0) {
             trackElementsPointingLeft.append(te);
         }
+        #endif
 
         // Read successor elements
         int nextNumber;
@@ -166,7 +243,18 @@ Route::Route(QString fileName)
             }
         }
 
-        skipLine(in, 3);
+        skipLine(in, 2);
+
+        QString stationName = in.readLine();
+        if (te->ereignis() == 3008 /* Bahnsteigmitte */ && !stationName.isEmpty()) {
+            stationName = purgeStationName(stationName);
+
+            if (!stations.contains(stationName)) {
+                stations.insert(stationName, new QList<QPointF>());
+            }
+
+            stations[stationName]->append(QPointF(endX, endY));
+        }
 
         te->setTunnel(in.readLine().contains("T"));
         te->setElectrified(in.readLine().toInt() > 0);
@@ -185,10 +273,9 @@ Route::Route(QString fileName)
             QString signal = in.readLine();
 
             if (!station.isEmpty() && !signal.isEmpty()) {
-                Signal *sig = new Signal(NULL, te->line().angle(), station + ", " + signal);
-                sig->setPos(te->line().p2());
-                m_signals.append(sig);
                 te->setHasSignal(true);
+                te->setStationName(station);
+                te->setTrackName(signal);
             }
 
             int numRows = in.readLine().toInt() + 1;
@@ -199,27 +286,42 @@ Route::Route(QString fileName)
             skipLine(in);
         }
 
-        skipLine(in);
+        te->setRegisterNo(in.readLine().toInt());
 
-        //qDebug() << elemNumber << startX <<startY << endX << endY << next[0] << next[1] << next[2];
-        trackElements.insert(te->number(), te);
+        m_trackElements.insert(te->number(), te);
+    }
+
+    // Add station names
+    foreach (QString stationName, stations.keys()) {
+        QPointF center = QPointF(0, 0);
+
+        foreach (QPointF point, *stations[stationName]) {
+            center += point;
+        }
+
+        center /= stations[stationName]->count();
+
+        Station *station = new Station();
+        station->pos = center;
+        station->name = stationName;
+        m_stations.append(station);
     }
 
     qDebug() << minX << minY << maxX << maxY;
+    qDeleteAll(stations.values());
 
     file.close();
 
     // Mark starting points
     foreach (TrackElement *te, startingPoints.keys()) {
-        te->setIsStartingPoint(true);
-
+        te->setIsStartingSegment(true);
         StartingPoint *startingPoint = new StartingPoint(NULL, te->line().angle(), startingPoints[te]);
         startingPoint->setPos(te->line().p1());
         m_startingPoints.append(startingPoint);
 
         while (!te->hasSignal() && te->next.size() > 0) {
             te = te->next.front();
-            te->setIsStartingPoint(true);
+            te->setIsStartingSegment(true);
         }
     }
 
@@ -249,93 +351,37 @@ Route::Route(QString fileName)
     qDeleteAll(trackElementsByStartX);
     #endif
 
-    // Create segments from track elements
-    foreach (TrackElement *te, trackElements) {
-        if (!te->isStartingPointOfSegment()) { continue; }
+    // Fahrstrasse segments
+    foreach (TrackElement *te, m_trackElements) {
+        if (!te->isStartingPointOfFahrstrasseSegment()) { continue; }
 
-        // Construct two path items: one for the track segment and one for the segment’s direction arrows,
-        // the latter positioned below. This is to prevent overlap on routes which can be used in both direction.
-        // The arrows are not shown for tunnel segments because it looks ugly.
-        TrackSegment *pathItem = new TrackSegment();
-        QGraphicsPathItem *pathArrowsItem = new QGraphicsPathItem();
-        QPainterPath path;
-        QPainterPath arrowPath;
+        FahrstrasseSegment *segment = new FahrstrasseSegment();
+        m_fahrstrasseSegments << segment;
 
-        pathItem->setZValue(ZVALUE_TRACK);
-        pathArrowsItem->setZValue(ZVALUE_ARROWS);
+        segment->trackElements()->append(te);
+        te->setFahrstrasseSegment(segment);
 
-        #ifdef RANDOM_COLORS
-        QColor penColor = QColor(qrand() % 256, qrand() % 256, qrand() % 256);
-        # else
-        QColor penColor = te->isStartingPoint() ? (te->electrified() ? Qt::darkGreen : Qt::green) : (te->electrified() ? Qt::black : Qt::darkGray);
-        # endif
-
-        pathItem->setPen(QPen(
-                             QBrush(penColor),
-                             te->bothDirections() ? 2 : 1,
-                             te->tunnel() ? Qt::DotLine : Qt::SolidLine,
-                             Qt::FlatCap));
-
-        pathArrowsItem->setPen(QPen(QBrush(penColor), 1, Qt::SolidLine, Qt::FlatCap));
-
-        path.moveTo(te->shiftedLine().p1());
-        path.lineTo(te->shiftedLine().p2());
-        double pathLength = te->line().length();
-
-        while (te->next.size() > 0 && te->next.front()->prev.front() == te && !te->next.front()->isStartingPointOfSegment()) {
+        while (te->next.size() == 1) {
             te = te->next.front();
 
-            path.lineTo(te->shiftedLine().p2());
-            pathLength += te->line().length();
-        }
-
-        pathItem->setPath(path);
-        m_trackSegments.append(pathItem);
-
-        if (!te->tunnel()) {
-            // Draw little arrows to indicate the direction of the track element.
-            // The arrows are drawn every ARROWEVERY meters, but at least once per track segment.
-            // They also are drawn at least ARROWLENGTH m from the beginning of the track segment.
-            int numArrows = ((pathLength - ARROWLENGTH) / ARROWEVERY) + 1;
-            double firstArrowPos = ARROWLENGTH + (pathLength - ARROWLENGTH - ARROWEVERY * (numArrows - 1)) / 2;
-
-            // Store arrow base points in a map beforehand because drawing them one after another could
-            // influence the computation of the following points.
-            // We have to store pointers to the points in the map because QPointF does not implement operator<.
-            QMap<QPointF*, qreal> arrowBasePoints;
-            for (int i = 0; i < numArrows; i++) {
-
-                // Take the maximum of the angles at the arrow base and arrow end to prevent arrows from
-                // pointing outside the opposite track segment in curves
-                qreal percentArrowBase = std::min(1.0, (firstArrowPos + ARROWEVERY * i) / pathLength);
-                qreal percentArrowEnd = std::max(0.0, (firstArrowPos + ARROWEVERY * i - ARROWLENGTH) / pathLength);
-
-                arrowBasePoints.insert(new QPointF(path.pointAtPercent(percentArrowBase)),
-                                       std::max(path.angleAtPercent(percentArrowBase), path.angleAtPercent(percentArrowEnd)) / 180 * M_PI);
+            if (te->isStartingPointOfFahrstrasseSegment()) {
+                break;
+            } else {
+                segment->trackElements()->append(te);
+                te->setFahrstrasseSegment(segment);
             }
-
-            foreach (QPointF* arrowBasePoint, arrowBasePoints.keys()) {
-                qreal angle = M_PI - arrowBasePoints[arrowBasePoint] + ARROWANGLE;
-
-                arrowPath.moveTo(*arrowBasePoint);
-                arrowPath.lineTo(*arrowBasePoint + QPointF(cos(angle) * ARROWLENGTH, sin(angle) * ARROWLENGTH));
-            }
-
-            qDeleteAll(arrowBasePoints.keys());
-            pathArrowsItem->setPath(arrowPath);
-            m_arrows.append(pathArrowsItem);
         }
     }
 
-    qDebug() << m_trackSegments.count() << "track segments";
+    qDebug() << m_fahrstrasseSegments.count() << "Fahrstrasse segments";
 }
 
 Route::~Route()
 {
-    qDeleteAll(trackElements);
-    qDeleteAll(m_trackSegments);
-    qDeleteAll(m_signals);
+    qDeleteAll(m_trackElements);
     qDeleteAll(m_viewPoints);
     qDeleteAll(m_wendepunkte);
     qDeleteAll(m_startingPoints);
+    qDeleteAll(m_fahrstrasseSegments);
+    qDeleteAll(m_stations);
 }

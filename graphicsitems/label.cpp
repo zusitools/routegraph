@@ -1,12 +1,14 @@
-#include "label.h"
+#include "graphicsitems/label.h"
 
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
 #include <QDebug>
+#include <limits>
 
 Label::Label(const QString text, QGraphicsItem *parent) : QGraphicsSimpleTextItem(text, parent)
 {
     setFlag(QGraphicsItem::ItemIgnoresTransformations, true);
+    setZValue(std::numeric_limits<double>::infinity());
 }
 
 QRectF Label::boundingRect() const {

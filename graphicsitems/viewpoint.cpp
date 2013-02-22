@@ -1,8 +1,8 @@
-#include "viewpoint.h"
+#include "graphicsitems/viewpoint.h"
 
 #include <cmath>
 
-#include "label.h"
+#include "graphicsitems/label.h"
 
 #define VIEWPOINTSIZE 50
 

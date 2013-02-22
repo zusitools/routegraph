@@ -1,4 +1,4 @@
-#include "trackelement.h"
+#include "model/trackelement.h"
 
 #include <QPainterPath>
 
@@ -9,7 +9,9 @@ TrackElement::TrackElement(const int number)
     this->m_number = number;
     this->m_bothDirections = false;
     this->m_isStartingPoint = false;
+    this->m_isStartingSegment = false;
     this->m_hasSignal = false;
+    this->m_ereignis = 0;
 }
 
 TrackElement::~TrackElement()
@@ -40,7 +42,17 @@ bool TrackElement::isStartingPointOfSegment()
     //  - it differs from its predecessors in a property (electrified, bothDirections, tunnel)
     // If there are multiple predecessors, the first predecessor is taken.
     TrackElement *pred = prev.front();
-    return (pred->next.front() != this) || (pred->electrified() ^ this->m_electrified) || (pred->bothDirections() ^ this->m_bothDirections) || (pred->tunnel() ^ this->m_tunnel)  || (pred->isStartingPoint() ^ this->m_isStartingPoint);
+    return (pred->next.front() != this) || (pred->electrified() ^ this->m_electrified) || (pred->bothDirections() ^ this->m_bothDirections) || (pred->tunnel() ^ this->m_tunnel)  || (pred->isStartingSegment() ^ this->m_isStartingSegment);
+}
+
+bool TrackElement::isStartingPointOfFahrstrasseSegment()
+{
+    if (prev.size() != 1 || this->m_isStartingPoint) {
+        return true;
+    }
+
+    TrackElement *pred = prev.front();
+    return pred->next.size() != 1 || pred->hasSignal() || pred->ereignis() == 3002;
 }
 
 void TrackElement::deleteFromNeighbors()
@@ -71,12 +83,12 @@ void TrackElement::deleteFromNeighbors()
     }
 }
 
-QLineF TrackElement::shiftedLine()
+QLineF TrackElement::shiftedLine(qreal shiftAmount)
 {
     if (!this->m_bothDirections) {
         // Shift by a little less than one line width to prevent drawing artifacts for opposite segments
         double angle = (this->line().angle() / 180 * M_PI); // angle in radian
-        return this->line().translated(QPointF(sin(angle) * (0.95 / 2), cos(angle) * (0.95 / 2)));
+        return this->line().translated(QPointF(sin(angle) * shiftAmount, cos(angle) * shiftAmount));
     } else {
         return this->m_line;
     }
