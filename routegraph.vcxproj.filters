@@ -63,6 +63,12 @@
     <Filter Include="Source Files\model">
       <UniqueIdentifier>{92ae687a-d2e5-44c5-a15b-32579a3e54a5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\libqxt">
+      <UniqueIdentifier>{59d19cec-edd6-46db-b525-e05d7ae292c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\libqxt">
+      <UniqueIdentifier>{61d188b9-8f69-4186-9109-36ce8c1a8747}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -173,6 +179,36 @@
     <ClCompile Include="model\statictraininfo.cpp">
       <Filter>Source Files\model</Filter>
     </ClCompile>
+    <ClCompile Include="savecapturedialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_savecapturedialog.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Release\moc_savecapturedialog.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="utils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_qxtspanslider.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Release\moc_qxtspanslider.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_qxtspanslider_p.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Release\moc_qxtspanslider_p.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="libqxt\qxtglobal.cpp">
+      <Filter>Source Files\libqxt</Filter>
+    </ClCompile>
+    <ClCompile Include="libqxt\qxtspanslider.cpp">
+      <Filter>Source Files\libqxt</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="mainwindow.h">
@@ -213,6 +249,18 @@
     </ClInclude>
     <CustomBuild Include="model\register.h">
       <Filter>Header Files\model</Filter>
+    </CustomBuild>
+    <CustomBuild Include="savecapturedialog.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="savecapturedialog.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="libqxt\qxtspanslider.h">
+      <Filter>Header Files\libqxt</Filter>
+    </CustomBuild>
+    <CustomBuild Include="libqxt\qxtspanslider_p.h">
+      <Filter>Header Files\libqxt</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
@@ -262,6 +310,15 @@
     </ClInclude>
     <ClInclude Include="model\route.h">
       <Filter>Header Files\model</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneratedFiles\ui_savecapturedialog.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="libqxt\qxtglobal.h">
+      <Filter>Header Files\libqxt</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
