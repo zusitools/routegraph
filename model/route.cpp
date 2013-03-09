@@ -169,7 +169,7 @@ QString purgeStationName(QString stationName) {
         result.truncate(threeDotsIndex);
     }
 
-    return stationName.replace('|', ' ').trimmed();
+    return result.replace('|', ' ').trimmed();
 }
 
 Route::Route(QString fileName)
