@@ -79,16 +79,16 @@ QList<QList<FahrstrasseSegment *> *> Route::findRoutesTo(uint32_t startElementNu
     QList<FahrstrasseSegment*> currentPath;
     currentPath.append(trackElement(startElementNumber)->fahrstrasseSegment());
 
-    findRouteRec(result, currentPath, recursionDepth, *target);
+    findRouteRec(result, currentPath, recursionDepth, target);
 
     return result;
 }
 
-void Route::findRouteRec(QList<QList<FahrstrasseSegment*> *> &results, QList<FahrstrasseSegment*> &currentPath, int recursionDepth, TimetableEntry &target)
+void Route::findRouteRec(QList<QList<FahrstrasseSegment*> *> &results, QList<FahrstrasseSegment*> &currentPath, int recursionDepth, TimetableEntry *target)
 {
     TrackElement *last = currentPath.last()->lastElement();
     if (last->hasSignal()) {
-        if (last->stationName() == target.stationName && target.allowedTracks.contains(last->trackName())) {
+        if (target == NULL || (last->stationName() == target->stationName && target->allowedTracks.contains(last->trackName()))) {
             // We found a path!
             QList<FahrstrasseSegment*> *newPath = new QList<FahrstrasseSegment*>(currentPath);
             results.append(newPath);

@@ -51,6 +51,7 @@ public:
     /**
      * Finds all possible routes (consisting of Fahrstrasse segments) from the element with the given number
      * to the signals defined by the given timetable entry.
+     * If target is null, recursion_depth will be ignored and all paths to the next signal will be returned.
      * At most "recursion_depth" track elements with signals will be encountered before canceling the search.
      */
     QList<QList<FahrstrasseSegment *> *> findRoutesTo(uint32_t startElementNumber, TimetableEntry *target, int recursionDepth);
@@ -82,7 +83,7 @@ private:
     /**
      * Recursively finds a route to the given timetable entry.
      */
-    void findRouteRec(QList<QList<FahrstrasseSegment *> *> &results, QList<FahrstrasseSegment *> &currentPath, int recursionDepth, TimetableEntry &target);
+    void findRouteRec(QList<QList<FahrstrasseSegment *> *> &results, QList<FahrstrasseSegment *> &currentPath, int recursionDepth, TimetableEntry *target);
 
     /**
      * Sets this track element and all its successors to "reachable from starting point".
