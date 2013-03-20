@@ -39,7 +39,8 @@ SOURCES += main.cpp\
     libqxt/qxtspanslider.cpp \
     libqxt/qxtglobal.cpp \
     savecapturedialog.cpp \
-    utils.cpp
+    utils.cpp \
+    graphicsitems/registermarker.cpp
 
 HEADERS  += mainwindow.h \
     trackview.h \
@@ -72,7 +73,8 @@ HEADERS  += mainwindow.h \
     libqxt/qxtspanslider.h \
     libqxt/qxtglobal.h \
     savecapturedialog.h \
-    utils.h
+    utils.h \
+    graphicsitems/registermarker.h
 
 FORMS    += mainwindow.ui \
     savecapturedialog.ui

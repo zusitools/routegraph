@@ -100,6 +100,8 @@ void TrackView::clearRoute() {
     m_fahrstrasseSegmentItems.clear();
     m_stationLabels.clear();
     m_fahrstrasseAufloesenMarkers.clear();
+    m_manualRegisterMarkers.clear();
+    m_automaticRegisterMarkers.clear();
 }
 
 void TrackView::setRoute(Route *route)
@@ -139,13 +141,18 @@ void TrackView::setRoute(Route *route)
             m_fahrstrasseAufloesenMarkers.append(fm);
         }
 
-#ifdef DISPLAY_REGISTERS
+        // Register markers
         if (te->registerNo() != 0) {
-            Marker *m = new Marker(0, te->line().angle(), QString::number(te->registerNo()), Qt::magenta);
+            RegisterMarker *m = new RegisterMarker(0, te->line().angle(), QString::number(te->registerNo()));
             m->setPos(te->line().pointAt(0.5));
             scene->addItem(m);
+
+            if (te->registerNo() < 1000) {
+                m_manualRegisterMarkers.append(m);
+            } else {
+                m_automaticRegisterMarkers.append(m);
+            }
         }
-#endif
     }
 
     foreach (Wendepunkt* wp, *(m_route->wendepunkte())) {
@@ -203,6 +210,20 @@ void TrackView::setStationNamesVisible(bool visible)
 {
     foreach (Label *label, m_stationLabels) {
         label->setVisible(visible);
+    }
+}
+
+void TrackView::setAutomaticRegistersVisible(bool visible)
+{
+    foreach (RegisterMarker *rm, m_automaticRegisterMarkers) {
+        rm->setVisible(visible);
+    }
+}
+
+void TrackView::setManualRegistersVisible(bool visible)
+{
+    foreach (RegisterMarker *rm, m_manualRegisterMarkers) {
+        rm->setVisible(visible);
     }
 }
 

@@ -47,6 +47,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->actionShowViewPointNames->setChecked(settings.value("view/showViewPointNames", false).toBool());
     ui->actionShowStationNames->setChecked(settings.value("view/showStationNames", ui->actionShowStationNames->isChecked()).toBool());
     ui->actionShowUnreachableTrackElements->setChecked(settings.value("view/showUnreachableTrackElements", ui->actionShowUnreachableTrackElements->isChecked()).toBool());
+    ui->actionShowAutomaticRegisters->setChecked(settings.value("view/showAutomaticRegisters", ui->actionShowAutomaticRegisters->isChecked()).toBool());
+    ui->actionShowManualRegisters->setChecked(settings.value("view/showManualRegisters", ui->actionShowManualRegisters->isChecked()).toBool());
     ui->actionTextScaling->setChecked(settings.value("view/textScaling", false).toBool());
 
     ui->actionShowTrains->setChecked(settings.value("trains/showTrains", ui->actionShowTrains->isChecked()).toBool());
@@ -75,6 +77,8 @@ MainWindow::~MainWindow()
     settings.setValue("view/showViewPointNames", ui->actionShowViewPointNames->isChecked());
     settings.setValue("view/showStationNames", ui->actionShowStationNames->isChecked());
     settings.setValue("view/showUnreachableTrackElements", ui->actionShowUnreachableTrackElements->isChecked());
+    settings.setValue("view/showAutomaticRegisters", ui->actionShowAutomaticRegisters->isChecked());
+    settings.setValue("view/showManualRegisters", ui->actionShowManualRegisters->isChecked());
     settings.setValue("view/textScaling", ui->actionTextScaling->isChecked());
     settings.setValue("trains/showTrains", ui->actionShowTrains->isChecked());
     settings.setValue("trains/showTrainName", ui->actionShowTrainName->isChecked());
@@ -145,6 +149,8 @@ void MainWindow::fileOpenTriggered()
     showSignalNamesTriggered(ui->actionShowSignalNames->isChecked());
     showStationNamesTriggered(ui->actionShowStationNames->isChecked());
     showUnreachableTrackElementsTriggered(ui->actionShowUnreachableTrackElements->isChecked());
+    showAutomaticRegistersTriggered(ui->actionShowAutomaticRegisters->isChecked());
+    showManualRegistersTriggered(ui->actionShowManualRegisters->isChecked());
 
     textScaleTriggered(ui->actionTextScaling->isChecked());
     antiAliasingTriggered(ui->actionAntiAliasing->isChecked());
@@ -276,6 +282,16 @@ void MainWindow::showStationNamesTriggered(bool on)
 void MainWindow::showUnreachableTrackElementsTriggered(bool on)
 {
     ui->trackView->setUnreachableTrackSegmentsVisible(on);
+}
+
+void MainWindow::showAutomaticRegistersTriggered(bool on)
+{
+    ui->trackView->setAutomaticRegistersVisible(on);
+}
+
+void MainWindow::showManualRegistersTriggered(bool on)
+{
+    ui->trackView->setManualRegistersVisible(on);
 }
 
 void MainWindow::antiAliasingTriggered(bool on)

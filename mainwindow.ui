@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>831</width>
-    <height>481</height>
+    <width>827</width>
+    <height>477</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -56,7 +56,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>831</width>
+     <width>827</width>
      <height>19</height>
     </rect>
    </property>
@@ -81,6 +81,8 @@
     <addaction name="actionShowViewPointNames"/>
     <addaction name="actionShowStartingPointNames"/>
     <addaction name="actionShowStationNames"/>
+    <addaction name="actionShowAutomaticRegisters"/>
+    <addaction name="actionShowManualRegisters"/>
     <addaction name="separator"/>
     <addaction name="actionShowUnreachableTrackElements"/>
     <addaction name="separator"/>
@@ -298,6 +300,28 @@
    </property>
    <property name="shortcut">
     <string>U</string>
+   </property>
+  </action>
+  <action name="actionShowManualRegisters">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Manual &amp;registers</string>
+   </property>
+   <property name="shortcut">
+    <string>R</string>
+   </property>
+  </action>
+  <action name="actionShowAutomaticRegisters">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>A&amp;utomatic registers</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+R</string>
    </property>
   </action>
  </widget>
@@ -634,6 +658,38 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionShowAutomaticRegisters</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>showAutomaticRegistersTriggered(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>413</x>
+     <y>238</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionShowManualRegisters</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>showManualRegistersTriggered(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>413</x>
+     <y>238</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>fileOpenTriggered()</slot>
@@ -656,5 +712,7 @@
   <slot>openCaptureTriggered()</slot>
   <slot>saveCaptureTriggered()</slot>
   <slot>showUnreachableTrackElementsTriggered(bool)</slot>
+  <slot>showAutomaticRegistersTriggered(bool)</slot>
+  <slot>showManualRegistersTriggered(bool)</slot>
  </slots>
 </ui>

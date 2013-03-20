@@ -7,6 +7,7 @@
 
 #include "model/route.h"
 #include "graphicsitems/label.h"
+#include "graphicsitems/registermarker.h"
 #include "graphicsitems/signalmarker.h"
 #include "graphicsitems/tracksegment.h"
 #include "graphicsitems/fahrstrassesegmentitem.h"
@@ -52,6 +53,16 @@ public:
     void setStationNamesVisible(bool visible);
 
     /**
+     * Sets the visibility of the automatic register markers
+     */
+    void setAutomaticRegistersVisible(bool visible);
+
+    /**
+     * Sets the visibility of the manual register markers
+     */
+    void setManualRegistersVisible(bool visible);
+
+    /**
      * Sets whether the text scales when zooming
      */
     void setTextScaling(bool on);
@@ -88,6 +99,8 @@ private:
     QList<FahrstrasseSegmentItem*> m_fahrstrasseSegmentItems;
     QList<Label*> m_stationLabels;
     QList<FahrstrasseAufloesenMarker*> m_fahrstrasseAufloesenMarkers;
+    QList<RegisterMarker*> m_manualRegisterMarkers;
+    QList<RegisterMarker*> m_automaticRegisterMarkers;
 
     /**
      * Creates the track segments from m_route's track elements.
