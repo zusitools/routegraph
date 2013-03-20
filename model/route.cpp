@@ -392,9 +392,9 @@ Route::Route(QString fileName)
 
     #ifdef REMOVE_OPPOSITES
     // Remove opposite direction elements
-    int originalCount = trackElements.count();
+    int originalCount = m_trackElements.count();
     foreach (TrackElement *te, trackElementsPointingLeft) {
-        if (!trackElements.contains(te->number())) {
+        if (!m_trackElements.contains(te->number())) {
             continue;
         }
 
@@ -402,13 +402,13 @@ Route::Route(QString fileName)
 
         if (opposite != NULL) {
             opposite->deleteFromNeighbors();
-            trackElements.remove(opposite->number());
+            m_trackElements.remove(opposite->number());
             te->setIsStartingPoint(te->isStartingPoint() || opposite->isStartingPoint());
             te->setBothDirections(true);
         }
     }
 
-    qDebug() << "Removed" << (originalCount - trackElements.count()) << "elements, now" << trackElements.count();
+    qDebug() << "Removed" << (originalCount - m_trackElements.count()) << "elements, now" << m_trackElements.count();
     qDebug() << myTimer.elapsed() << "ms for removing opposites";
     myTimer.restart();
     #endif
