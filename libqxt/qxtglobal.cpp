@@ -29,7 +29,7 @@
 ** <http://libqxt.org>  <foundation@libqxt.org>
 *****************************************************************************/
 
-#include "qxtglobal.h"
+#include "libqxt/qxtglobal.h"
 
 /*!
     \headerfile <QxtGlobal>
