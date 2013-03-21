@@ -238,7 +238,7 @@
         <location filename="mainwindow.cpp" line="172"/>
         <location filename="mainwindow.cpp" line="228"/>
         <source>Capture files (*.zusicapture *.ZUSICAPTURE)</source>
-        <translation>Aufzeichnungsdateien (*.zusicapture *:ZUSICAPTURE)</translation>
+        <translation>Aufzeichnungsdateien (*.zusicapture *.ZUSICAPTURE)</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="188"/>
