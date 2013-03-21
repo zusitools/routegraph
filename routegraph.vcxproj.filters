@@ -209,6 +209,9 @@
     <ClCompile Include="libqxt\qxtspanslider.cpp">
       <Filter>Source Files\libqxt</Filter>
     </ClCompile>
+    <ClCompile Include="graphicsitems\registermarker.cpp">
+      <Filter>Source Files\graphicsitems</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="mainwindow.h">
@@ -319,6 +322,9 @@
     </ClInclude>
     <ClInclude Include="libqxt\qxtglobal.h">
       <Filter>Header Files\libqxt</Filter>
+    </ClInclude>
+    <ClInclude Include="graphicsitems\registermarker.h">
+      <Filter>Header Files\graphicsitems</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

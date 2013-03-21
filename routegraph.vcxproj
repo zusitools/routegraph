@@ -165,6 +165,7 @@
     <ClCompile Include="graphicsitems\label.cpp" />
     <ClCompile Include="graphicsitems\marker.cpp" />
     <ClCompile Include="graphicsitems\minwidthpathitem.cpp" />
+    <ClCompile Include="graphicsitems\registermarker.cpp" />
     <ClCompile Include="graphicsitems\signalmarker.cpp" />
     <ClCompile Include="graphicsitems\startingpoint.cpp" />
     <ClCompile Include="graphicsitems\tracksegment.cpp" />
@@ -222,6 +223,7 @@
     <ClInclude Include="graphicsitems\fahrstrasseaufloesenmarker.h" />
     <ClInclude Include="graphicsitems\label.h" />
     <ClInclude Include="graphicsitems\marker.h" />
+    <ClInclude Include="graphicsitems\registermarker.h" />
     <ClInclude Include="graphicsitems\signalmarker.h" />
     <ClInclude Include="graphicsitems\startingpoint.h" />
     <ClInclude Include="graphicsitems\tracksegment.h" />
