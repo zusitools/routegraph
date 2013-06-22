@@ -456,7 +456,7 @@ void TrainManager::timerTick()
                     int recursionDepth = m_memReader->fahrstrasseRecursionDepth(); // TODO cache this
 
                     while (recursionDepth >= 0 && currentStartSegment != NULL && currentStartSegment->lastElement()->number() != train->fahrstrasseStartElemNumber) {
-                        if (currentStartSegment->lastElement()->hasSignal()) {
+                        if (currentStartSegment->lastElement()->directionInfo(true) && currentStartSegment->lastElement()->directionInfo(true)->signal) {
                             recursionDepth--;
                         }
 
@@ -483,7 +483,7 @@ void TrainManager::timerTick()
                 if (train->fahrstrasseStartElemNumber == 0) {
                     FahrstrasseSegment *currentStartSegment = train->occupiedFahrstrasseSegments->first();
 
-                    while (currentStartSegment != NULL && !currentStartSegment->lastElement()->hasSignal()) {
+                    while (currentStartSegment != NULL && !(currentStartSegment->lastElement()->directionInfo(true) && currentStartSegment->lastElement()->directionInfo(true)->signal)) {
                         currentStartSegment = getNextSegment(currentStartSegment);
                         if (currentStartSegment != NULL) {
                             train->occupiedFahrstrasseSegments->enqueue(currentStartSegment);

@@ -6,7 +6,17 @@
 #include <vector>
 #include <stdint.h>
 
-class FahrstrasseSegment;
+QT_FORWARD_DECLARE_CLASS(FahrstrasseSegment)
+QT_FORWARD_DECLARE_CLASS(Ereignis)
+QT_FORWARD_DECLARE_CLASS(TrackElementSignal)
+
+struct TrackElementDirectionInfo {
+    TrackElementSignal *signal;
+    std::vector<Ereignis*> ereignisse;
+    uint32_t registerNo;
+
+    bool hasEreignis(uint32_t ereignisNo);
+};
 
 class TrackElement
 {
@@ -39,35 +49,17 @@ public:
     uint32_t number() { return m_number; }
     bool electrified() { return m_electrified; }
     bool tunnel() { return m_tunnel; }
-    bool bothDirections() { return m_bothDirections; }
+    bool bothDirections() { return m_directionInfoNormal != NULL && m_directionInfoOpposite != NULL; }
     bool isStartingPoint() { return m_isStartingPoint; }
+    inline char zusiVersion() const { return m_zusiVersion; }
     inline bool isStartingSegment() { return m_isStartingSegment; }
-    bool hasSignal() { return m_hasSignal; }
-
-    /**
-     * The name of the station associated with this element's signal (if present).
-     */
-    inline QString stationName() const { return m_stationName; }
-
-    /**
-     * The name of the station associated with this element's signal (if present).
-     */
-    inline QString trackName() const { return m_trackName; }
+    inline TrackElementDirectionInfo *directionInfo(bool dirNormal) const { return dirNormal ? m_directionInfoNormal : m_directionInfoOpposite; }
+    inline void addDirectionInfo(bool dirNormal) { if (dirNormal) m_directionInfoNormal = new TrackElementDirectionInfo(); else m_directionInfoOpposite = new TrackElementDirectionInfo(); }
 
     /**
      * Returns a pointer to this element's Fahrstraße segment
      */
     inline FahrstrasseSegment *fahrstrasseSegment() const { return m_fahrstrasseSegment; }
-
-    /**
-     * Returns the Ereignis number of this element.
-     */
-    inline unsigned short ereignis() { return m_ereignis; }
-
-    /**
-     * Returns the number of this element's register.
-     */
-    inline unsigned int registerNo() { return m_registerNo; }
 
     /**
      * Returns whether this track element is reachable from any starting point of the route.
@@ -77,15 +69,11 @@ public:
     void setLine(const QLineF line) { m_line = line; }
     void setElectrified(const bool electrified) { m_electrified = electrified; }
     void setTunnel(const bool tunnel) { m_tunnel = tunnel; }
-    void setBothDirections(const bool bothDirections) { m_bothDirections = bothDirections; }
     void setIsStartingPoint(const bool isStartingPoint) { m_isStartingPoint = isStartingPoint; }
     inline void setIsStartingSegment(const bool isStartingSegment) { m_isStartingSegment = isStartingSegment; }
-    void setHasSignal(const bool hasSignal) { m_hasSignal = hasSignal; }
-    inline void setEreignis(const unsigned short ereignis) { m_ereignis = ereignis; }
+    inline void setZusiVersion(const char value) { m_zusiVersion = value; }
     inline void setFahrstrasseSegment(FahrstrasseSegment* fahrstrasseSegment) { m_fahrstrasseSegment = fahrstrasseSegment; }
     inline void setRegisterNo(const unsigned int registerNo) { m_registerNo = registerNo; }
-    inline void setStationName(const QString stationName) { m_stationName = stationName; }
-    inline void setTrackName(const QString trackName) { m_trackName = trackName; }
     inline void setIsReachableFromStartingPoint(const bool isReachable) { m_isReachableFromStartingPoint = isReachable; }
 
 private:
@@ -93,17 +81,15 @@ private:
     int m_number;
     bool m_electrified;
     bool m_tunnel;
-    bool m_bothDirections;
     bool m_isStartingPoint;
     bool m_isStartingSegment;
-    bool m_hasSignal;
-    unsigned short m_ereignis;
+    char m_zusiVersion;
     FahrstrasseSegment *m_fahrstrasseSegment;
     unsigned int m_registerNo;
     bool m_isReachableFromStartingPoint;
 
-    QString m_stationName;
-    QString m_trackName;
+    TrackElementDirectionInfo *m_directionInfoNormal;
+    TrackElementDirectionInfo *m_directionInfoOpposite;
 };
 
 #endif // TRACKELEMENT_H

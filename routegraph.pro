@@ -40,7 +40,9 @@ SOURCES += main.cpp\
     libqxt/qxtglobal.cpp \
     savecapturedialog.cpp \
     utils.cpp \
-    graphicsitems/registermarker.cpp
+    graphicsitems/registermarker.cpp \
+    model/ereignis.cpp \
+    model/trackelementsignal.cpp
 
 HEADERS  += mainwindow.h \
     trackview.h \
@@ -74,7 +76,9 @@ HEADERS  += mainwindow.h \
     libqxt/qxtglobal.h \
     savecapturedialog.h \
     utils.h \
-    graphicsitems/registermarker.h
+    graphicsitems/registermarker.h \
+    model/ereignis.h \
+    model/trackelementsignal.h
 
 FORMS    += mainwindow.ui \
     savecapturedialog.ui

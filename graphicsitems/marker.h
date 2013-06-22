@@ -9,7 +9,7 @@ class Label;
 /**
  * Represents a labeled marker shaped as an equilateral triangle.
  * The center of one of the sides is positioned at (0, 0) and the triangle points in the
- * direction specified by the angle.
+ * direction specified by the angle (in degrees).
  */
 class Marker: public QGraphicsItem
 {

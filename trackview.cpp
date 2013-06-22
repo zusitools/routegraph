@@ -6,6 +6,8 @@
 #include "graphicsitems/signalmarker.h"
 #include "model/fahrstrassesegment.h"
 #include "model/station.h"
+#include "model/ereignis.h"
+#include "model/trackelementsignal.h"
 
 // Uncomment this to give each track segment a random color
 // #define RANDOM_COLORS
@@ -124,33 +126,76 @@ void TrackView::setRoute(Route *route)
     }
 
     foreach (TrackElement* te, m_route->trackElements()) {
-        // Signal
-        if (te->hasSignal()) {
-            SignalMarker *sm = new SignalMarker(0, te->line().angle(), te->stationName() + ", " + te->trackName());
-            sm->setPos(te->line().p2());
-            scene->addItem(sm);
-            m_signals.append(sm);
+        if (te->directionInfo(true)) {
+            // Signal
+            if (te->directionInfo(true)->signal) {
+                SignalMarker *sm = new SignalMarker(0, te->line().angle(), te->directionInfo(true)->signal->stationName() + ", " + te->directionInfo(true)->signal->signalName());
+                sm->setPos(te->line().p2());
+                scene->addItem(sm);
+                m_signals.append(sm);
+            }
+
+            // Ereignis markers
+            std::vector<Ereignis*>::iterator ereignis;
+            for (ereignis = te->directionInfo(true)->ereignisse.begin(); ereignis != te->directionInfo(true)->ereignisse.end(); ++ereignis) {
+                if (te->zusiVersion() == 2 && (*ereignis)->type() == 3002) {
+                    FahrstrasseAufloesenMarker *fm = new FahrstrasseAufloesenMarker();
+                    fm->setPos(te->line().p2());
+                    fm->setRotation(270 - te->line().angle());
+                    scene->addItem(fm);
+                    m_fahrstrasseAufloesenMarkers.append(fm);
+                }
+            }
+
+            // Register markers
+            if (te->directionInfo(true)->registerNo != 0) {
+                RegisterMarker *m = new RegisterMarker(0, te->line().angle(), QString::number(te->directionInfo(true)->registerNo));
+                m->setPos(te->line().pointAt(0.5));
+                scene->addItem(m);
+
+                // TODO find out how this is handled in Zusi 3
+                if (te->directionInfo(true)->registerNo < 1000) {
+                    m_manualRegisterMarkers.append(m);
+                } else {
+                    m_automaticRegisterMarkers.append(m);
+                }
+            }
         }
 
-        // "Fahrstrasse auflösen" markers
-        if (te->ereignis() == 3002) {
-            FahrstrasseAufloesenMarker *fm = new FahrstrasseAufloesenMarker();
-            fm->setPos(te->line().p2());
-            fm->setRotation(270 - te->line().angle());
-            scene->addItem(fm);
-            m_fahrstrasseAufloesenMarkers.append(fm);
-        }
+        // TODO ugly, code duplication
+        if (te->directionInfo(false)) {
+            // Signal
+            if (te->directionInfo(false)->signal) {
+                SignalMarker *sm = new SignalMarker(0, te->line().angle() + 180, te->directionInfo(true)->signal->stationName() + ", " + te->directionInfo(true)->signal->signalName());
+                sm->setPos(te->line().p1());
+                scene->addItem(sm);
+                m_signals.append(sm);
+            }
 
-        // Register markers
-        if (te->registerNo() != 0) {
-            RegisterMarker *m = new RegisterMarker(0, te->line().angle(), QString::number(te->registerNo()));
-            m->setPos(te->line().pointAt(0.5));
-            scene->addItem(m);
+            // Ereignis markers
+            std::vector<Ereignis*>::iterator ereignis;
+            for (ereignis = te->directionInfo(false)->ereignisse.begin(); ereignis != te->directionInfo(false)->ereignisse.end(); ++ereignis) {
+                if (te->zusiVersion() == 2 && (*ereignis)->type() == 3002) {
+                    FahrstrasseAufloesenMarker *fm = new FahrstrasseAufloesenMarker();
+                    fm->setPos(te->line().p1());
+                    fm->setRotation(270 - te->line().angle() + 180);
+                    scene->addItem(fm);
+                    m_fahrstrasseAufloesenMarkers.append(fm);
+                }
+            }
 
-            if (te->registerNo() < 1000) {
-                m_manualRegisterMarkers.append(m);
-            } else {
-                m_automaticRegisterMarkers.append(m);
+            // Register markers
+            if (te->directionInfo(false)->registerNo != 0) {
+                RegisterMarker *m = new RegisterMarker(0, te->line().angle() + 180, QString::number(te->directionInfo(false)->registerNo));
+                m->setPos(te->line().pointAt(0.5));
+                scene->addItem(m);
+
+                // TODO find out how this is handled in Zusi 3
+                if (te->directionInfo(false)->registerNo < 1000) {
+                    m_manualRegisterMarkers.append(m);
+                } else {
+                    m_automaticRegisterMarkers.append(m);
+                }
             }
         }
     }

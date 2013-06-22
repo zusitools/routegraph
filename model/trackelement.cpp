@@ -1,18 +1,30 @@
 #include "model/trackelement.h"
+#include "model/ereignis.h"
 
 #include <QPainterPath>
 
 #include <cmath>
 
+bool TrackElementDirectionInfo::hasEreignis(uint32_t ereignisNo)
+{
+    std::vector<Ereignis*>::iterator ereignis;
+    for (ereignis = ereignisse.begin(); ereignis != ereignisse.end(); ++ereignis) {
+        if ((*ereignis)->type() == ereignisNo) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 TrackElement::TrackElement(const int number)
-    : m_isReachableFromStartingPoint(false)
+    : m_isReachableFromStartingPoint(false),
+      m_directionInfoNormal(NULL),
+      m_directionInfoOpposite(NULL)
 {
     this->m_number = number;
-    this->m_bothDirections = false;
     this->m_isStartingPoint = false;
     this->m_isStartingSegment = false;
-    this->m_hasSignal = false;
-    this->m_ereignis = 0;
 }
 
 TrackElement::~TrackElement()
@@ -43,7 +55,7 @@ bool TrackElement::isStartingPointOfSegment()
     //  - it differs from its predecessors in a property (electrified, bothDirections, tunnel)
     // If there are multiple predecessors, the first predecessor is taken.
     TrackElement *pred = prev.front();
-    return (pred->next.front() != this) || (pred->electrified() ^ this->m_electrified) || (pred->bothDirections() ^ this->m_bothDirections) || (pred->tunnel() ^ this->m_tunnel)  || (pred->isStartingSegment() ^ this->m_isStartingSegment)
+    return (pred->next.front() != this) || (pred->electrified() ^ this->m_electrified) || (pred->bothDirections() ^ this->bothDirections()) || (pred->tunnel() ^ this->m_tunnel)  || (pred->isStartingSegment() ^ this->m_isStartingSegment)
             || (pred->isReachableFromStartingPoint() ^ this->m_isReachableFromStartingPoint);
 }
 
@@ -54,7 +66,7 @@ bool TrackElement::isStartingPointOfFahrstrasseSegment()
     }
 
     TrackElement *pred = prev.front();
-    return pred->next.size() != 1 || pred->hasSignal() || pred->ereignis() == 3002;
+    return pred->next.size() != 1 || (pred->directionInfo(true) && pred->directionInfo(true)->signal) || pred->directionInfo(true)->hasEreignis(3002);
 }
 
 void TrackElement::deleteFromNeighbors()
@@ -87,7 +99,7 @@ void TrackElement::deleteFromNeighbors()
 
 QLineF TrackElement::shiftedLine(qreal shiftAmount)
 {
-    if (!this->m_bothDirections) {
+    if (!this->bothDirections()) {
         // Shift by a little less than one line width to prevent drawing artifacts for opposite segments
         double angle = (this->line().angle() / 180 * M_PI); // angle in radian
         return this->line().translated(QPointF(sin(angle) * shiftAmount, cos(angle) * shiftAmount));

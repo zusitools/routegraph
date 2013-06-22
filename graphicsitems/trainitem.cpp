@@ -7,6 +7,7 @@
 #include <cmath>
 
 #include "zvalues.h"
+#include "model/trackelementsignal.h"
 
 // Width of the train item (standard scale) in pixels
 #define WIDTH 2.5
@@ -162,8 +163,8 @@ void TrainItem::updateLabel()
             labelText += ", ";
         }
 
-        QString stationRouteFree = m_train->occupiedFahrstrasseSegments->first()->lastElement()->stationName();
-        QString trackRouteFree = m_train->occupiedFahrstrasseSegments->first()->lastElement()->trackName();
+        QString stationRouteFree = m_train->occupiedFahrstrasseSegments->first()->lastElement()->directionInfo(true)->signal->stationName();
+        QString trackRouteFree = m_train->occupiedFahrstrasseSegments->first()->lastElement()->directionInfo(true)->signal->signalName();
 
         labelText += QString(QObject::tr("-> %1, track %2")).arg(stationRouteFree, trackRouteFree);
     }

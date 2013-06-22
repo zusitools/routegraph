@@ -16,6 +16,8 @@
 
 #include "signal.h"
 #include "zvalues.h"
+#include "model/ereignis.h"
+#include "model/trackelementsignal.h"
 
 // Uncomment this to remove opposite direction elements
 // #define REMOVE_OPPOSITES
@@ -57,7 +59,7 @@ QList<TrackElement *> Route::trackElementsWithSignals()
 {
     QList<TrackElement*> trackElementsWithSignals;
     foreach (TrackElement *te, m_trackElements.values()) {
-        if (te->hasSignal()) {
+        if ((te->directionInfo(true) && te->directionInfo(true)->signal) || (te->directionInfo(false) && te->directionInfo(false)->signal)) {
             trackElementsWithSignals.append(te);
         }
     }
@@ -87,8 +89,8 @@ QList<QList<FahrstrasseSegment *> *> Route::findRoutesTo(uint32_t startElementNu
 void Route::findRouteRec(QList<QList<FahrstrasseSegment*> *> &results, QList<FahrstrasseSegment*> &currentPath, int recursionDepth, TimetableEntry *target)
 {
     TrackElement *last = currentPath.last()->lastElement();
-    if (last->hasSignal()) {
-        if (target == NULL || (last->stationName() == target->stationName && target->allowedTracks.contains(last->trackName()))) {
+    if (last->directionInfo(true) && last->directionInfo(true)->signal) {
+        if (target == NULL || (last->directionInfo(true)->signal->stationName() == target->stationName && target->allowedTracks.contains(last->directionInfo(true)->signal->signalName()))) {
             // We found a path!
             QList<FahrstrasseSegment*> *newPath = new QList<FahrstrasseSegment*>(currentPath);
             results.append(newPath);
@@ -126,7 +128,7 @@ void Route::setReachableRec(TrackElement *const trackElement) const
         te->setIsReachableFromStartingPoint(true);
 
         // Wendepunkt: Opposite direction element is reachable, too
-        if (te->ereignis() == 3036 || te->ereignis() == 3037) {
+        if (te->directionInfo(true) && (te->directionInfo(true)->hasEreignis(3036) || te->directionInfo(true)->hasEreignis(3037))) {
             TrackElement *opposite = findOppositeTrackElement(te);
             if (opposite != NULL) {
                 setReachableRec(opposite);
@@ -238,9 +240,15 @@ Route::Route(QString fileName)
     while (!in.atEnd()) {
         int elementNumber = in.readLine().toInt();
         TrackElement *te = getTrackElement(elementNumber);
+        te->addDirectionInfo(true);
         skipLine(in, 3);
 
-        te->setEreignis(in.readLine().toShort());
+        uint32_t ereignis = in.readLine().toInt();
+        if (ereignis != 0) {
+            Ereignis *newEreignis = new Ereignis();
+            newEreignis->setType(ereignis);
+            te->directionInfo(true)->ereignisse.push_back(newEreignis);
+        }
 
         double startY = -in.readLine().replace(',', '.').toDouble();
         double startX = -in.readLine().replace(',', '.').toDouble();
@@ -265,7 +273,7 @@ Route::Route(QString fileName)
         te->setLine(QLineF(startX, startY, endX, endY));
 
         // Read Ereignisse only after setting the track element coordinates
-        if (te->ereignis() == 3036 || te->ereignis() == 3037) {
+        if (te->directionInfo(true)->hasEreignis(3036) || te->directionInfo(true)->hasEreignis(3037)) {
             // Wendepunkt / Wendepunkt auf anderen Blocknamen
             Wendepunkt *wendepunkt = new Wendepunkt(0, te->line().angle());
             wendepunkt->setPos(te->line().p2());
@@ -300,7 +308,7 @@ Route::Route(QString fileName)
         skipLine(in, 2);
 
         QString stationName = in.readLine();
-        if (te->ereignis() == 3008 /* Bahnsteigmitte */ && !stationName.isEmpty()) {
+        if (te->directionInfo(true)->hasEreignis(3008) /* Bahnsteigmitte */ && !stationName.isEmpty()) {
             stationName = purgeStationName(stationName);
 
             if (!stations.contains(stationName)) {
@@ -327,9 +335,9 @@ Route::Route(QString fileName)
             QString signal = in.readLine();
 
             if (!station.isEmpty() && !signal.isEmpty()) {
-                te->setHasSignal(true);
-                te->setStationName(station);
-                te->setTrackName(signal);
+                te->directionInfo(true)->signal = new TrackElementSignal();
+                te->directionInfo(true)->signal->setStationName(station);
+                te->directionInfo(true)->signal->setSignalName(signal);
             }
 
             int numRows = in.readLine().toInt() + 1;
@@ -381,7 +389,7 @@ Route::Route(QString fileName)
 
         setReachableRec(te);
 
-        while (!te->hasSignal() && te->next.size() > 0) {
+        while (!te->directionInfo(true)->signal && te->next.size() > 0) {
             te = te->next.front();
             te->setIsStartingSegment(true);
         }
