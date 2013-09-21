@@ -348,7 +348,7 @@ Route::Route(QString fileName)
             skipLine(in);
         }
 
-        te->setRegisterNo(in.readLine().toInt());
+        te->directionInfo(true)->registerNo = in.readLine().toInt();
 
         m_trackElements.insert(te->number(), te);
     }

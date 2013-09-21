@@ -73,7 +73,6 @@ public:
     inline void setIsStartingSegment(const bool isStartingSegment) { m_isStartingSegment = isStartingSegment; }
     inline void setZusiVersion(const char value) { m_zusiVersion = value; }
     inline void setFahrstrasseSegment(FahrstrasseSegment* fahrstrasseSegment) { m_fahrstrasseSegment = fahrstrasseSegment; }
-    inline void setRegisterNo(const unsigned int registerNo) { m_registerNo = registerNo; }
     inline void setIsReachableFromStartingPoint(const bool isReachable) { m_isReachableFromStartingPoint = isReachable; }
 
 private:
