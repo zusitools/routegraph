@@ -12,6 +12,8 @@ QT_FORWARD_DECLARE_CLASS(TrackElementSignal)
 QT_FORWARD_DECLARE_CLASS(Register)
 
 struct TrackElementDirectionInfo {
+    TrackElementDirectionInfo() : signal(NULL), _register(NULL) {}
+
     TrackElementSignal *signal;
     std::vector<Ereignis*> ereignisse;
     Register *_register;

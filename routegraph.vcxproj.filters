@@ -101,12 +101,6 @@
     <ClCompile Include="memread\zusimemoryreaderexception.cpp">
       <Filter>Source Files\memread</Filter>
     </ClCompile>
-    <ClCompile Include="Debug\moc_fahrstrassesegmentitem.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="Release\moc_fahrstrassesegmentitem.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
     <ClCompile Include="graphicsitems\fahrstrassesegmentitem.cpp">
       <Filter>Source Files\graphicsitems</Filter>
     </ClCompile>
@@ -212,6 +206,30 @@
     <ClCompile Include="graphicsitems\registermarker.cpp">
       <Filter>Source Files\graphicsitems</Filter>
     </ClCompile>
+    <ClCompile Include="model\ereignis.cpp">
+      <Filter>Source Files\model</Filter>
+    </ClCompile>
+    <ClCompile Include="model\trackelementsignal.cpp">
+      <Filter>Source Files\model</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_fahrstrassesegmentitem.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Release\moc_fahrstrassesegmentitem.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_marker.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Release\moc_marker.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_registermarker.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Release\moc_registermarker.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="mainwindow.h">
@@ -235,9 +253,6 @@
     <ClInclude Include="model\statictraininfo.h">
       <Filter>Header Files\model</Filter>
     </ClInclude>
-    <ClInclude Include="graphicsitems\minwidthpathitem.h">
-      <Filter>Header Files\graphicsitems</Filter>
-    </ClInclude>
     <ClInclude Include="model\station.h">
       <Filter>Header Files\model</Filter>
     </ClInclude>
@@ -246,9 +261,6 @@
     </ClInclude>
     <ClInclude Include="windowserrorhelper.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="graphicsitems\fahrstrasseaufloesenmarker.h">
-      <Filter>Header Files\graphicsitems</Filter>
     </ClInclude>
     <CustomBuild Include="model\register.h">
       <Filter>Header Files\model</Filter>
@@ -265,13 +277,19 @@
     <CustomBuild Include="libqxt\qxtspanslider_p.h">
       <Filter>Header Files\libqxt</Filter>
     </CustomBuild>
+    <CustomBuild Include="graphicsitems\fahrstrassesegmentitem.h">
+      <Filter>Header Files\graphicsitems</Filter>
+    </CustomBuild>
+    <CustomBuild Include="graphicsitems\marker.h">
+      <Filter>Header Files\graphicsitems</Filter>
+    </CustomBuild>
+    <CustomBuild Include="graphicsitems\registermarker.h">
+      <Filter>Header Files\graphicsitems</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="mainwindow.ui">
       <Filter>Form Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="graphicsitems\fahrstrassesegmentitem.h">
-      <Filter>Header Files\graphicsitems</Filter>
     </CustomBuild>
     <CustomBuild Include="model\fahrstrassesegment.h">
       <Filter>Header Files\model</Filter>
@@ -281,30 +299,6 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="graphicsitems\label.h">
-      <Filter>Header Files\graphicsitems</Filter>
-    </ClInclude>
-    <ClInclude Include="graphicsitems\marker.h">
-      <Filter>Header Files\graphicsitems</Filter>
-    </ClInclude>
-    <ClInclude Include="graphicsitems\signalmarker.h">
-      <Filter>Header Files\graphicsitems</Filter>
-    </ClInclude>
-    <ClInclude Include="graphicsitems\startingpoint.h">
-      <Filter>Header Files\graphicsitems</Filter>
-    </ClInclude>
-    <ClInclude Include="graphicsitems\tracksegment.h">
-      <Filter>Header Files\graphicsitems</Filter>
-    </ClInclude>
-    <ClInclude Include="graphicsitems\trainitem.h">
-      <Filter>Header Files\graphicsitems</Filter>
-    </ClInclude>
-    <ClInclude Include="graphicsitems\viewpoint.h">
-      <Filter>Header Files\graphicsitems</Filter>
-    </ClInclude>
-    <ClInclude Include="graphicsitems\wendepunkt.h">
-      <Filter>Header Files\graphicsitems</Filter>
-    </ClInclude>
     <ClInclude Include="model\trackelement.h">
       <Filter>Header Files\model</Filter>
     </ClInclude>
@@ -323,7 +317,37 @@
     <ClInclude Include="libqxt\qxtglobal.h">
       <Filter>Header Files\libqxt</Filter>
     </ClInclude>
-    <ClInclude Include="graphicsitems\registermarker.h">
+    <ClInclude Include="model\trackelementsignal.h">
+      <Filter>Header Files\model</Filter>
+    </ClInclude>
+    <ClInclude Include="model\ereignis.h">
+      <Filter>Header Files\model</Filter>
+    </ClInclude>
+    <ClInclude Include="graphicsitems\fahrstrasseaufloesenmarker.h">
+      <Filter>Header Files\graphicsitems</Filter>
+    </ClInclude>
+    <ClInclude Include="graphicsitems\label.h">
+      <Filter>Header Files\graphicsitems</Filter>
+    </ClInclude>
+    <ClInclude Include="graphicsitems\minwidthpathitem.h">
+      <Filter>Header Files\graphicsitems</Filter>
+    </ClInclude>
+    <ClInclude Include="graphicsitems\signalmarker.h">
+      <Filter>Header Files\graphicsitems</Filter>
+    </ClInclude>
+    <ClInclude Include="graphicsitems\startingpoint.h">
+      <Filter>Header Files\graphicsitems</Filter>
+    </ClInclude>
+    <ClInclude Include="graphicsitems\tracksegment.h">
+      <Filter>Header Files\graphicsitems</Filter>
+    </ClInclude>
+    <ClInclude Include="graphicsitems\trainitem.h">
+      <Filter>Header Files\graphicsitems</Filter>
+    </ClInclude>
+    <ClInclude Include="graphicsitems\viewpoint.h">
+      <Filter>Header Files\graphicsitems</Filter>
+    </ClInclude>
+    <ClInclude Include="graphicsitems\wendepunkt.h">
       <Filter>Header Files\graphicsitems</Filter>
     </ClInclude>
   </ItemGroup>
