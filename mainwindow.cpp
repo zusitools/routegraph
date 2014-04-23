@@ -588,7 +588,7 @@ void MainWindow::trackViewDoubleClicked(QMouseEvent *event)
 
 void MainWindow::keyPressEvent(QKeyEvent * event)
 {
-#if false //#ifdef _WIN32
+#ifdef _WIN32
     // Send F2, F9, F11 event to the Zusi window
     // does not yet work on Linux
     if (event->key() == Qt::Key_F2 || event->key() == Qt::Key_F9 || event->key() == Qt::Key_F11) {
@@ -613,7 +613,7 @@ void MainWindow::keyPressEvent(QKeyEvent * event)
     QMainWindow::keyPressEvent(event);
 }
 
-#if false //#ifdef _WIN32
+#ifdef _WIN32
 void mySendInput(INPUT &ip, WORD key, bool ctrl) {
     if (ctrl) {
         // Press the "Ctrl" key
