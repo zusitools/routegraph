@@ -35,6 +35,7 @@ MainWindow::MainWindow(QWidget *parent) :
     m_route(NULL),
     m_trainManager(NULL),
     m_trainItems(),
+    m_registerSets(NULL),
     m_trainToFollow(0)
 {
     ui->setupUi(this);
@@ -65,6 +66,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->simTimeSlider->setVisible(false);
     ui->simTimeLabel->setVisible(false);
     ui->menu_Trains->menuAction()->setVisible(false);
+
+    // RegisterFiles slider is only visible after loading a capture
+    ui->registerFilesSlider->setVisible(false);
 }
 
 MainWindow::~MainWindow()
@@ -92,6 +96,11 @@ MainWindow::~MainWindow()
     if (m_route) {
         delete m_route;
     }
+
+    if (m_registerSets) {
+        qDeleteAll(*m_registerSets);
+        delete m_registerSets;
+    }
 }
 
 void MainWindow::fileOpenTriggered()
@@ -114,6 +123,7 @@ void MainWindow::fileOpenTriggered()
     ui->actionReconnectToZusi->setEnabled(false);
     ui->actionOpenCapture->setEnabled(false);
     ui->actionSaveCapture->setEnabled(false);
+    ui->actionOpenRegister->setEnabled(false);
 
     // Remove and delete train items
     if (ui->trackView->scene()) {
@@ -143,6 +153,7 @@ void MainWindow::fileOpenTriggered()
     this->setWindowTitle(QDir::toNativeSeparators(fileName));
     ui->actionReconnectToZusi->setEnabled(true);
     ui->actionOpenCapture->setEnabled(true);
+    ui->actionOpenRegister->setEnabled(true);
 
     showViewPointNamesTriggered(ui->actionShowViewPointNames->isChecked());
     showStartingPointNamesTriggered(ui->actionShowStartingPointNames->isChecked());
@@ -159,6 +170,68 @@ void MainWindow::fileOpenTriggered()
 
     resetTrainManager(false);
     startCapture();
+}
+
+void MainWindow::openRegisterTriggered()
+{
+    // Retrieve file names from open dialog.
+    QStringList fileNames = QFileDialog::getOpenFileNames(this, tr("Open register occupation file(s)"), "", tr("Register occupation files (*Register.txt)"));
+
+    if (fileNames.isEmpty()) {
+        return;
+    }
+
+    qSort(fileNames);
+
+    QList<QSet<int>* > *registerSets = new QList<QSet<int>* >();
+
+    foreach(QString fileName, fileNames)
+    {
+        QFile file(fileName);
+        if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+            return;
+
+        QTextStream in(&file);
+        in.setCodec("ISO 8859-1");
+
+        /* QString title1 = */ in.readLine(); // "Belegte Register"
+        /* QString tableHeader = */ in.readLine(); // "Nr. \t Streckenelement-Nr"
+        QSet<int> *occupiedRegisters = new QSet<int>;
+
+        while (!in.atEnd())
+        {
+            QString line = in.readLine();
+            QStringList lineElements = line.split("\t", QString::KeepEmptyParts);
+            if (lineElements.isEmpty())
+            {
+                continue;
+            }
+            bool ok = true;
+            int reg = lineElements.at(0).toInt(&ok);
+            if (!ok)
+            {
+                continue;
+            }
+            if (!occupiedRegisters->contains(reg))
+            {
+                occupiedRegisters->insert(reg);
+            }
+        }
+        file.close();
+
+        registerSets->append(occupiedRegisters);
+    }
+
+    if (m_registerSets) {
+        qDeleteAll(*m_registerSets);
+        delete m_registerSets;
+    }
+    m_registerSets = registerSets;
+
+    ui->registerFilesSlider->setVisible(registerSets->count() > 1);
+    ui->registerFilesSlider->setMaximum(registerSets->count() - 1);
+    ui->registerFilesSlider->setValue(0);
+    registerFilesSliderValueChanged(ui->registerFilesSlider->value());
 }
 
 void MainWindow::openCaptureTriggered()
@@ -340,6 +413,13 @@ void MainWindow::trainUpdateException(ZusiMemoryReaderException &e)
     QMessageBox::critical(this, tr("Error"), tr("Error while executing the following action: \"%1\"\nMessage: \"%2\"").arg(e.action(), e.message()));
 }
 
+void MainWindow::registerFilesSliderValueChanged(int value)
+{
+    if ((m_registerSets->length() > value) && (value >= 0) && m_route)
+        m_route->setOccupiedRegisters(m_registerSets->at(value));
+
+}
+
 void MainWindow::simTimeSliderValueChanged(int value)
 {
     if (!m_trainManager) {
@@ -508,7 +588,7 @@ void MainWindow::trackViewDoubleClicked(QMouseEvent *event)
 
 void MainWindow::keyPressEvent(QKeyEvent * event)
 {
-#ifdef _WIN32
+#if false //#ifdef _WIN32
     // Send F2, F9, F11 event to the Zusi window
     // does not yet work on Linux
     if (event->key() == Qt::Key_F2 || event->key() == Qt::Key_F9 || event->key() == Qt::Key_F11) {
@@ -533,7 +613,7 @@ void MainWindow::keyPressEvent(QKeyEvent * event)
     QMainWindow::keyPressEvent(event);
 }
 
-#ifdef _WIN32
+#if false //#ifdef _WIN32
 void mySendInput(INPUT &ip, WORD key, bool ctrl) {
     if (ctrl) {
         // Press the "Ctrl" key

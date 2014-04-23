@@ -15,7 +15,7 @@
 #define HEIGHT (ARROWSIZE * sqrt(3.0) / 2)
 
 Marker::Marker(QGraphicsItem *parent, qreal phi, const QString text, const QColor color)
-    : QGraphicsItem(parent)
+    : QObject(), QGraphicsItem(parent)
 {
     this->setZValue(ZVALUE_MARKERS);
     this->angle = M_PI / 2 + phi / 180 * M_PI;
@@ -66,4 +66,11 @@ void Marker::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
     painter->setBrush(m_color);
 
     painter->drawConvexPolygon(points, 3);
+}
+
+void Marker::setColor(const QColor color)
+{
+    m_color = color;
+    m_label->setPen(QPen(color));
+    update();
 }

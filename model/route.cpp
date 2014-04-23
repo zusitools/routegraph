@@ -348,7 +348,7 @@ Route::Route(QString fileName)
             skipLine(in);
         }
 
-        te->directionInfo(true)->registerNo = in.readLine().toInt();
+        te->directionInfo(true)->_register = getRegister(in.readLine().toInt());
 
         m_trackElements.insert(te->number(), te);
     }
@@ -459,4 +459,26 @@ Route::~Route()
     qDeleteAll(m_startingPoints);
     qDeleteAll(m_fahrstrasseSegments);
     qDeleteAll(m_stations);
+    qDeleteAll(m_registers);
+}
+
+Register *Route::getRegister(int regNumber)
+{
+    if (regNumber == 0)
+    {
+        return NULL;
+    }
+    if (!m_registers.contains(regNumber))
+    {
+        m_registers.insert(regNumber, new Register(regNumber));
+    }
+    return m_registers.value(regNumber);
+}
+
+void Route::setOccupiedRegisters(QSet<int> *occupiedRegisters)
+{
+    foreach(Register* reg, this->getRegisters())
+    {
+        reg->setOccupationState((occupiedRegisters->contains(reg->getRegNumber())) ? Register::Occupied : Register::Free);
+    }
 }

@@ -9,11 +9,12 @@
 QT_FORWARD_DECLARE_CLASS(FahrstrasseSegment)
 QT_FORWARD_DECLARE_CLASS(Ereignis)
 QT_FORWARD_DECLARE_CLASS(TrackElementSignal)
+QT_FORWARD_DECLARE_CLASS(Register)
 
 struct TrackElementDirectionInfo {
     TrackElementSignal *signal;
     std::vector<Ereignis*> ereignisse;
-    uint32_t registerNo;
+    Register *_register;
 
     bool hasEreignis(uint32_t ereignisNo);
 };
@@ -84,7 +85,6 @@ private:
     bool m_isStartingSegment;
     char m_zusiVersion;
     FahrstrasseSegment *m_fahrstrasseSegment;
-    unsigned int m_registerNo;
     bool m_isReachableFromStartingPoint;
 
     TrackElementDirectionInfo *m_directionInfoNormal;

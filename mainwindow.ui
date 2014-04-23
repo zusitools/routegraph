@@ -49,6 +49,16 @@
       </item>
      </layout>
     </item>
+    <item>
+     <widget class="QSlider" name="registerFilesSlider">
+      <property name="maximum">
+       <number>0</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menuBar">
@@ -57,7 +67,7 @@
      <x>0</x>
      <y>0</y>
      <width>827</width>
-     <height>19</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -68,6 +78,8 @@
     <addaction name="separator"/>
     <addaction name="actionOpenCapture"/>
     <addaction name="actionSaveCapture"/>
+    <addaction name="separator"/>
+    <addaction name="actionOpenRegister"/>
    </widget>
    <widget class="QMenu" name="menu_View">
     <property name="title">
@@ -322,6 +334,17 @@
    </property>
    <property name="shortcut">
     <string>Shift+R</string>
+   </property>
+  </action>
+  <action name="actionOpenRegister">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Open &amp;register occupation(s)</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+O</string>
    </property>
   </action>
  </widget>
@@ -690,6 +713,38 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionOpenRegister</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>openRegisterTriggered()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>413</x>
+     <y>238</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>registerFilesSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>registerFilesSliderValueChanged(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>413</x>
+     <y>467</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>413</x>
+     <y>238</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>fileOpenTriggered()</slot>
@@ -701,6 +756,7 @@
   <slot>zoomInTriggered()</slot>
   <slot>zoomOutTriggered()</slot>
   <slot>zoomFitTriggered()</slot>
+  <slot>registerFilesSliderValueChanged(int)</slot>
   <slot>simTimeSliderValueChanged(int)</slot>
   <slot>reconnectToZusiTriggered()</slot>
   <slot>showTrainsTriggered(bool)</slot>

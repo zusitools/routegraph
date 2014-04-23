@@ -1,6 +1,7 @@
 #include "graphicsitems/tracksegment.h"
 
 #include "zvalues.h"
+#include <qmath.h>
 
 #define ARROWEVERY 100
 #define ARROWLENGTH 10.0

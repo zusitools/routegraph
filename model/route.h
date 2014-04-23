@@ -10,6 +10,7 @@
 #include "model/fahrstrassesegment.h"
 #include "model/station.h"
 #include "model/timetableentry.h"
+#include "model/register.h"
 #include "graphicsitems/viewpoint.h"
 #include "graphicsitems/startingpoint.h"
 #include "graphicsitems/wendepunkt.h"
@@ -26,6 +27,18 @@ public:
     QList<StartingPoint*> *startingPoints() { return &m_startingPoints; }
     QList<Wendepunkt*> *wendepunkte() { return &m_wendepunkte; }
     QList<FahrstrasseSegment*> *fahrstrasseSegments() { return &m_fahrstrasseSegments; }
+    QHash<int, Register*> getRegisters() { return m_registers; }
+
+
+    /**
+     * Returns the register with the specified number, creating it if it doesn't exist.
+     */
+    Register* getRegister(int regNumber);
+
+    /**
+     * Sets the following registers (exclusive) to be occupied.
+     */
+    void setOccupiedRegisters(QSet<int> *occupiedRegisters);
 
     /**
      * Returns a list of this route's stations.
@@ -62,6 +75,7 @@ private:
     QList<StartingPoint*> m_startingPoints;
     QList<Wendepunkt*> m_wendepunkte;
     QList<FahrstrasseSegment*> m_fahrstrasseSegments;
+    QHash<int, Register*> m_registers;
     QList<Station*> m_stations;
 
     QString m_lsFile;

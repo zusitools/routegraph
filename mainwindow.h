@@ -23,6 +23,7 @@ public:
     ~MainWindow();
 public slots:
     void fileOpenTriggered();
+    void openRegisterTriggered();
     void openCaptureTriggered();
     void saveCaptureTriggered();
 
@@ -42,6 +43,7 @@ public slots:
     void trainsUpdated();
     void trainUpdateException(ZusiMemoryReaderException &e);
 
+    void registerFilesSliderValueChanged(int value);
     void simTimeSliderValueChanged(int value);
 
     void reconnectToZusiTriggered();
@@ -58,6 +60,7 @@ private:
 
     TrainManager *m_trainManager;
     QHash<uint32_t, TrainItem *> m_trainItems;
+    QList<QSet<int>* > *m_registerSets;
 
     /**
      * Is called when a key is pressed.

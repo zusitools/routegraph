@@ -148,13 +148,13 @@ void TrackView::setRoute(Route *route)
             }
 
             // Register markers
-            if (te->directionInfo(true)->registerNo != 0) {
-                RegisterMarker *m = new RegisterMarker(0, te->line().angle(), QString::number(te->directionInfo(true)->registerNo));
+            if (te->directionInfo(true)->_register) {
+                RegisterMarker *m = new RegisterMarker(0, te->line().angle(), te->directionInfo(true)->_register);
                 m->setPos(te->line().pointAt(0.5));
                 scene->addItem(m);
 
                 // TODO find out how this is handled in Zusi 3
-                if (te->directionInfo(true)->registerNo < 1000) {
+                if (te->directionInfo(true)->_register->getRegNumber() < 1000) {
                     m_manualRegisterMarkers.append(m);
                 } else {
                     m_automaticRegisterMarkers.append(m);
@@ -185,13 +185,13 @@ void TrackView::setRoute(Route *route)
             }
 
             // Register markers
-            if (te->directionInfo(false)->registerNo != 0) {
-                RegisterMarker *m = new RegisterMarker(0, te->line().angle() + 180, QString::number(te->directionInfo(false)->registerNo));
+            if (te->directionInfo(false)->_register) {
+                RegisterMarker *m = new RegisterMarker(0, te->line().angle() + 180,te->directionInfo(false)->_register);
                 m->setPos(te->line().pointAt(0.5));
                 scene->addItem(m);
 
                 // TODO find out how this is handled in Zusi 3
-                if (te->directionInfo(false)->registerNo < 1000) {
+                if (te->directionInfo(false)->_register->getRegNumber() < 1000) {
                     m_manualRegisterMarkers.append(m);
                 } else {
                     m_automaticRegisterMarkers.append(m);

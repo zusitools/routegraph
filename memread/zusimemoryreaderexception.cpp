@@ -9,7 +9,7 @@ ZusiMemoryReaderException::ZusiMemoryReaderException(QString action, QString mes
 #if __cplusplus > 199711L
 ZusiMemoryReaderException::~ZusiMemoryReaderException() noexcept
 #else
-ZusiMemoryReaderException::~ZusiMemoryReaderException()
+ZusiMemoryReaderException::~ZusiMemoryReaderException() throw()
 #endif
 {
 }

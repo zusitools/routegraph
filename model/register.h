@@ -2,25 +2,32 @@
 #define REGISTER_H
 
 #include <QObject>
-#include "model/train.h"
 
 class Register : public QObject
 {
     Q_OBJECT
 public:
-    explicit Register(QObject *parent = 0);
+    explicit Register(int regNumber, QObject *parent = 0);
 
-    inline void setOccupiedBy(Train *occupiedBy) { m_occupiedBy = occupiedBy; }
-    inline Train *occupiedBy() { return m_occupiedBy; }
+    enum OccupationState
+    {
+        Occupied,
+        Free
+    };
+
+    void setOccupationState(OccupationState value);
+    inline OccupationState getOccupationState() { return m_occupationState; }
+
+    inline int getRegNumber() { return m_regNumber; }
 
 signals:
+    void occupationChanged(OccupationState occupationState);
 
 public slots:
 
 private:
-    Train *m_occupiedBy;
-
-
+    int m_regNumber;
+    OccupationState m_occupationState;
 };
 
 #endif // REGISTER_H

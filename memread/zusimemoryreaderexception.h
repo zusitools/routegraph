@@ -11,7 +11,7 @@ public:
 #if __cplusplus > 199711L
     ~ZusiMemoryReaderException() noexcept;
 #else
-    ~ZusiMemoryReaderException();
+    ~ZusiMemoryReaderException() throw();
 #endif
 
     inline QString action() { return m_action; }
