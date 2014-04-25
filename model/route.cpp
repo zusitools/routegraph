@@ -389,7 +389,7 @@ Route::Route(QString fileName)
 
         setReachableRec(te);
 
-        while (!te->directionInfo(true)->signal && te->next.size() > 0) {
+        while (te->directionInfo(true) && !te->directionInfo(true)->signal && te->next.size() > 0) {
             te = te->next.front();
             te->setIsStartingSegment(true);
         }
