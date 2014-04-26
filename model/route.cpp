@@ -240,6 +240,7 @@ Route::Route(QString fileName)
     while (!in.atEnd()) {
         int elementNumber = in.readLine().toInt();
         TrackElement *te = getTrackElement(elementNumber);
+        te->setZusiVersion(2);
         te->addDirectionInfo(true);
         skipLine(in, 3);
 
